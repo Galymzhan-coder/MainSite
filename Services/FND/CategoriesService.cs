@@ -6,26 +6,54 @@ using Models.DTO.Interfaces;
 
 namespace Services.FND
 {
-    public class CategoriesService:ICategoriesService, IBaseService
+    //public class CategoriesService:ICategoriesService, DBService<CategoryDTO>//IBaseService<IDto>
+    public class CategoriesService : DBService<CategoryDTO>, ICategoriesService//, IBaseService<IDto>
     {
         private ODDANP _odp;
         private string error ;
         private string db_prefix = "db_nsk.";
 
-        public CategoriesService(ODDANP odp) 
+        public CategoriesService(ODDANP odp):base(odp, "categories") 
         { 
             _odp = odp;
         }
-
-        public IEnumerable<IDto> Index() 
+        /*
+        public IEnumerable<IDto> Index(string tabName,string whereCond) 
         {
             string err = string.Empty;
-            var sql = SqlCommandBuilder.BuildSelectCommand<CategoryDTO>($"{db_prefix}categories", "");
+            var sql = SqlCommandBuilder.BuildSelectCommand<CategoryDTO>($"{db_prefix}categories", " 1=1 order by root,lft,rgt");
             var lst = _odp.Routine.GetFromDatabase<CategoryDTO>(ref err, sql);
 
             return lst.ToList();
         }
+        */
 
+        public override IEnumerable<CategoryDTO> Index()
+        {
+
+            //var lst = Index($"{db_prefix}categories", " 1=1 order by root,lft,rgt");
+            var lst = Index(" 1=1 order by root,lft,rgt");
+
+            return lst;
+        }
+
+        public override List<CategoryDTO> getHierarchyLst()
+        {
+
+            
+            var lst = getHierarchyLst("");
+
+            return lst.ToList();
+
+        }
+
+        public override CategoryDTO? getItem(int id)
+        {
+            var item = getItem(id,"");
+            return item;
+        }
+
+        /*
         public void create()
         {
 
@@ -84,6 +112,7 @@ namespace Services.FND
             return item;
 
         }
+        */
 
     }
 }

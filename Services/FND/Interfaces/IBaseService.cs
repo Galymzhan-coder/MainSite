@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface IBaseService
+    public interface IBaseService<T>
     {
-        public IEnumerable<IDto> Index();
-        public void create();
-        public void update(string tabName, int id, IDto dto);
-        public void delete(int id);
-        public IDto? getItem(int id);
+        public IEnumerable<T> Index();
+        //IEnumerable<T> Index(string whereCond);
+        void create();
+        void update(int id, T dto);
+        void delete(int id);
+        T? getItem(int id, string whereCond);
     }
 }

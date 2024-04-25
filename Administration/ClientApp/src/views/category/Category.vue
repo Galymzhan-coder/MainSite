@@ -15,7 +15,8 @@
 
       <div v-for="(item, index) in items" :key="item.id" class="grid grid-cols-6 gap-0" style="grid-template-columns: 0.5fr 6fr 2fr 2fr 2fr">
         <div class="p-2 border">{{ index + 1 }}</div>
-        <div class="p-2 border">{{ item.title }}</div>
+        <!--<div class="p-2 border">{{ item.title }}</div>-->
+        <div class="p-2 border" :style="{ paddingLeft: (10 + (item.level * 50)) + 'px' }">{{ item.title }}</div>
         <div class="p-2 border">
           <button @click="moveUp(index)" :disabled="index === 0" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mr-2">
             <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <circle cx="12" cy="12" r="9" />  <line x1="12" y1="8" x2="8" y2="12" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="16" y1="12" x2="12" y2="8" /></svg>
@@ -25,7 +26,7 @@
           </button>
         </div>
         <div class="p-2 border">
-          <input type="checkbox" v-model="item.is_active" />
+          <input type="checkbox" v-model="item.is_active" @change="() => ChaangeData(item)" />
         </div>
         <div class="p-2 border">
           <button @click="deleteItem(index)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2">
@@ -65,9 +66,9 @@
     onMounted(async () => {
       try {
         //const data = await apiService.fetchData('Index');
-        const data = await apiService.fetchDataByType('IndexCommon','category');
+        const data = await apiService.fetchDataByType('Index','category');
         
-        items.value = data.sort((a,b) => a.id - b.id);
+        items.value = data;//data.sort((a,b) => a.id - b.id);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -128,6 +129,15 @@ function goToPageById(url,id) {
   router.push({ name: url, params: { id: id } });
 }
 
+    async  function ChaangeData(item) {
+      try {
+        console.log("ChaangeData, item = ", item);
+        await apiService.sendData(`Update?type=category&id=${item.id}`, item, 'post')
+      } catch (e) {
+        console.log("ChaangeData, sendData error = ", e);
+      }
+
+    }
   </script>
 
 <style>

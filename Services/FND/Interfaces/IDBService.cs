@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface ICategoriesService : IDBService<CategoryDTO>
+    public interface IDBService<T> : IBaseService<T> where T : IDto
     {
+        abstract List<T> getHierarchyLst();
+
+        abstract T? getItem(int id);
         
     }
 }

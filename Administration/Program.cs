@@ -32,9 +32,11 @@ using Administration.Helpers;
 using Administration.Interfaces;
 using Administration.Services;
 using Microsoft.OpenApi.Models;
+using Models.DTO.Interfaces;
 using Models.Entities;
 using Models.FFIFND;
 using Services.FND;
+using Services.FND.Interfaces;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Diagnostics;
 
@@ -56,7 +58,14 @@ builder.Services.AddControllersWithViews();
 //builder.Services.AddDbContext<DbNskContext>();
 builder.Services.AddScoped<IUserInterface, UserServices>();
 builder.Services.AddScoped<ODDANP>();
-builder.Services.AddScoped<CategoriesService>();
+//builder.Services.AddScoped<CategoriesService>();
+//builder.Services.AddScoped<IDto>();
+builder.Services.AddScoped<CategoryDTO>();
+//builder.Services.AddScoped<IDBService<IDto>>();
+//builder.Services.AddScoped(typeof(IDBService<IDto>), typeof(CategoriesService));
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+//builder.Services.AddScoped<IDBService<CategoryDTO>, CategoriesService>();
+//DBService<CategoryDTO>, ICategoriesService
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddCors(options =>
 {
@@ -88,7 +97,7 @@ builder.Services.AddSwaggerGen(c =>
     c.DescribeAllParametersInCamelCase();
 }
 );
-
+builder.Logging.AddConsole();
 
 //builder.Services.AddSwaggerGen();
 

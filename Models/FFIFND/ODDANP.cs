@@ -21,7 +21,8 @@ namespace Models.FFIFND
         int CheckGenerator(decimal tblid, ref string seqname, ref string message);
         decimal PutToDatabase<T>(T model, string tablename, string seqname, ref string message, string shema = null, bool dateasstring = false);
         decimal UpdateFromModel<T>(T model, string tablename, ref string message, string whereclause = null, string shema = null, bool dateasstring = false);
-        IEnumerable<T> GetFromDatabase<T>(ref string message, string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : class, new();
+        //IEnumerable<T> GetFromDatabase<T>(ref string message, string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : class, new();
+        public IEnumerable<T> GetFromDatabase<T>(ref string message, string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : new();
         bool DeleteFromDB(string tablename, string whereclause, ref string message);
         bool UpdateFromSql(string sql, ref string message);
         //decimal UpdateFromIUFValues<T>(T model, ref string message);
@@ -537,7 +538,8 @@ namespace Models.FFIFND
                 return -1;
             }
         }
-        private IEnumerable<T> _GetFromDatabase<T>(string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : class, new()
+        //private IEnumerable<T> _GetFromDatabase<T>(string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : class, new()
+        private IEnumerable<T> _GetFromDatabase<T>(string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T: new()
         {
             DataTable tbl = new DataTable();
             if (string.IsNullOrWhiteSpace(sql) == false)
@@ -710,7 +712,8 @@ namespace Models.FFIFND
                 }
             }
         }
-        public IEnumerable<T> GetFromDatabase<T>(ref string message, string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : class, new()
+        //public IEnumerable<T> GetFromDatabase<T>(ref string message, string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : class, new()
+        public IEnumerable<T> GetFromDatabase<T>(ref string message, string sql = null, string tablename = null, string whereclause = null, string shema = null, List<string> propertyname = null) where T : new()
         {
             try
             {

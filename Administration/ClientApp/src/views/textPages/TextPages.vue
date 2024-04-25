@@ -42,13 +42,30 @@
     <script setup>
     import { ref } from 'vue';
     import textPagesEdit from './TextPagesEdit.vue';
-  
+
+     import { useRouter } from 'vue-router';
+     import ApiService from '../../services/api-service.js';
+
+     const apiService = new ApiService();
     
     const items = ref([
+      /*
       { id: 1, name: 'Item 1', chpu: 'Item chpu 1',active: true },
       { id: 2, name: 'Item 2', chpu: 'Item chpu 2',active: false },
       { id: 3, name: 'Item 3', chpu: 'Item chpu 3',active: true },
+      */
     ]);
+
+      onMounted(async () => {
+        try {
+          //const data = await apiService.fetchData('Index');
+          const data = await apiService.fetchDataByType('IndexCommon', 'content');
+
+          items.value = data;//data.sort((a,b) => a.id - b.id);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      });
     
     function addItem() {
       items.value.push({ id: items.value.length + 1, name: `Item ${items.value.length + 1}`, chpu: `Item chpu ${items.value.length + 1}`, active: true });
@@ -82,4 +99,3 @@
     showForm.value = false;
   }
     </script>
-  
