@@ -1,8 +1,10 @@
-﻿using Asp.Versioning;
+﻿//using Administration.Factories.Interfaces;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
 using Models.DTO.Interfaces;
 using Newtonsoft.Json;
+using Services.Factory.Interfaces;
 using Services.FND;
 using Services.FND.Interfaces;
 
@@ -13,6 +15,7 @@ namespace Administration.Controllers
         private readonly CategoriesService _categoriesService;
         private readonly IDBService<IDto> _dbService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceFactory _serviceFactory;
 
         private readonly Dictionary<string, (string,Type, Type)> _serviceTypes = new Dictionary<string, (string,Type, Type)>
         {
@@ -32,10 +35,18 @@ namespace Administration.Controllers
             _dbService = dbService;
         }
         */
-        public AdminController(IServiceProvider serviceProvider)
+        
+        public AdminController(IServiceProvider serviceProvider, IServiceFactory serviceFactory)
         {
             _serviceProvider = serviceProvider;
+            _serviceFactory = serviceFactory;
         }
+        /*
+        public AdminController(IServiceFactory serviceFactory)
+        {
+            _serviceFactory = serviceFactory;
+        }
+        */
         /*
         [HttpGet("Index"), ApiVersion("1")]
         public IActionResult Index()
@@ -44,6 +55,81 @@ namespace Administration.Controllers
             return Ok(lst);
         }
         */
+        
+        [HttpGet("Index"), ApiVersion("1")]
+        public IActionResult Index(string type)
+        {
+            var service = _serviceFactory.GetService(type); 
+
+            if(service == null)
+                return NotFound($"Service for type '{type}' not found.");
+
+            
+            var lst = service.Index();
+                return Ok(lst);
+            
+            
+        }
+
+        [HttpGet("GetIerarchyList"), ApiVersion("1")]
+        public IActionResult GetIerarchyList(string type)
+        {
+            var service = _serviceFactory.GetService(type);
+
+            if (service == null)
+                return NotFound($"GetIerarchyList. Service for type '{type}' not found.");
+
+            var lst = service.getHierarchyLst();
+            return Ok(lst);            
+
+        }
+
+        [HttpGet("GetItem"), ApiVersion("1")]
+        public IActionResult GetItem(string type, int id)
+        {
+            var service = _serviceFactory.GetService(type);
+
+            if (service == null)
+                return NotFound($"GetItem. Service for type '{type}' not found.");
+
+            var item = service.getItem(id);
+            return Ok(item);
+
+        }
+        
+        [HttpPost("Update"), ApiVersion("1")]
+        public IActionResult Update(string type, int id, [FromBody] dynamic json)
+        {
+            var service = _serviceFactory.GetService(type);
+
+            if (service == null)
+                return NotFound($"Update. Service for type '{type}' not found.");
+
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
+
+            try
+            {
+                var dto = JsonConvert.DeserializeObject(json.ToString(), _serviceFactory.GetClass(type) , settings);
+
+                service.update(id, dto);
+                
+                return Ok();
+                
+            }
+            catch (JsonException je)
+            {
+                return BadRequest($"Update. JSON parsing error: {je.Message}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Update. An error occurred: {ex.Message}");
+            }
+        }
+
+        /*
         [HttpGet("Index"), ApiVersion("1")]
         public IActionResult Index(string type)
         {
@@ -65,8 +151,8 @@ namespace Administration.Controllers
             }
             return BadRequest($"Incorrect service type: {type}.");
         }
-
-
+        */
+        /*
         [HttpGet("GetIerarchyList"), ApiVersion("1")]
         public IActionResult GetIerarchyList(string type)
         {
@@ -108,8 +194,8 @@ namespace Administration.Controllers
             return BadRequest("GetItem: Некорректный тип сервиса: IDBService");
 
         }
-
-
+        */
+        /*
         [HttpPost("Update"), ApiVersion("1")]
         public IActionResult Update(string type, int id, [FromBody] dynamic json)
         {
@@ -127,7 +213,7 @@ namespace Administration.Controllers
 
                     if (service != null)
                     {
-                        service.update(id, (IDto)dto);
+                        service.update(id, dto);
                         return Ok();
                     }
 

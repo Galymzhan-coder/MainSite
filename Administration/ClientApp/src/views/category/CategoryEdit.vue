@@ -94,7 +94,7 @@
 
   onMounted(async () => {
     try {
-      const data = await apiService.fetchData('CategoryIerarchyList');
+      const data = await apiService.fetchDataByType('GetIerarchyList','category');
       items.value = data;
       //console.log("router=", router, ", id=", route.params.id);
       //selectedItem = ref(items.value.find(item => item.id === itemsEdit.parentId)?.title || null);
@@ -114,7 +114,7 @@
 
       //itemsEdit.value.is_active = itemsEdit.value.is_active === 1 ? true : false;
 
-      console.log("route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData, " , itemsEdit.value.description=", itemsEdit.value.description);
+      console.log("CategoryEdit id=", id,", route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData, " , itemsEdit.value.description=", itemsEdit.value.description);
       console.log("itemsEdit=", itemsEdit);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -255,7 +255,7 @@
   const state = reactive({
     dynamicComponent: null,
     content: '<p>Initial Content</p>',
-    _content: '<p><br></p><p>asdadasdasd<img src="https://localhost:7153/uploaded-images/Солтангажы Арман (9).jpg"></p>',
+    _content: '',
     editorOption: {
       placeholder: 'core',
       modules: {

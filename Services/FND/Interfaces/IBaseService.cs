@@ -9,7 +9,7 @@ namespace Services.FND.Interfaces
 {
     public interface IBaseService<T>
     {
-        public IEnumerable<T> Index();
+        IEnumerable<T> Index();
         //IEnumerable<T> Index(string whereCond);
         void create();
         void update(int id, T dto);

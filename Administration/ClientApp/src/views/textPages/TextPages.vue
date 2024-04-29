@@ -40,10 +40,10 @@
     </template>
     
     <script setup>
-    import { ref } from 'vue';
+      import { ref, onMounted } from 'vue';
     import textPagesEdit from './TextPagesEdit.vue';
 
-     import { useRouter } from 'vue-router';
+     //import { useRouter } from 'vue-router';
      import ApiService from '../../services/api-service.js';
 
      const apiService = new ApiService();

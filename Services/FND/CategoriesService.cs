@@ -41,7 +41,7 @@ namespace Services.FND
         {
 
             
-            var lst = getHierarchyLst("");
+            var lst = getHierarchyLst("is_active=1");
 
             return lst.ToList();
 
@@ -49,7 +49,7 @@ namespace Services.FND
 
         public override CategoryDTO? getItem(int id)
         {
-            var item = getItem(id,"");
+            var item = getItem(id, "");
             return item;
         }
 

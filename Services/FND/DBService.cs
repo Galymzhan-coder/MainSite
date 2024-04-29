@@ -25,7 +25,7 @@ namespace Services.FND
 
         public abstract T? getItem(int id);
 
-        public IEnumerable<T> Index(string whereCond) 
+        protected IEnumerable<T> Index(string whereCond) 
         {
             string err = string.Empty;
             var sql = SqlCommandBuilder.BuildSelectCommand<T>($"{db_prefix}{_tableName}", whereCond);
@@ -80,7 +80,7 @@ namespace Services.FND
             string err = string.Empty;
 
             //var sql = SqlCommandBuilder.BuildSelectCommand<T>($"{db_prefix}{_tableName}", $"is_active=1 and id={id}");
-            var sql = SqlCommandBuilder.BuildSelectCommand<T>($"{db_prefix}{_tableName}", whereCond);
+            var sql = SqlCommandBuilder.BuildSelectCommand<T>($"{db_prefix}{_tableName}", $"id={id} {(string.IsNullOrEmpty(whereCond)?"":$"and {whereCond}") }");
 
             var item = _odp.Routine.GetFromDatabase<T>(ref err, sql).FirstOrDefault();
 

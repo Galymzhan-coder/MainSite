@@ -126,6 +126,7 @@ function goToPage(url) {
 */
 function goToPageById(url,id) {
   //router.push(`${url}/${id}`);
+  //console.log('goToPageById id=', id);
   router.push({ name: url, params: { id: id } });
 }
 
