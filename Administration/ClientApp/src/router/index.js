@@ -43,15 +43,21 @@ const routes = [
         component: category,
       },
       {
+        name: 'categoryEdit',
+        path: '/categoryEdit/:id',
+        component: categoryEdit,
+      },
+      {
         name: 'TextPages',
         path: '/TextPages',
         component: textPages,
       },
       {
-        name: 'categoryEdit',
-        path: '/categoryEdit/:id',
+        name: 'TextPagesEdit',
+        path: '/TextPagesEdit/:id',
         component: categoryEdit,
       },
+      
     ],
   },
 ];
