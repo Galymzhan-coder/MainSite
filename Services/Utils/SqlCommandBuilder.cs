@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -89,6 +91,24 @@ namespace Services.Utils
 
             return sql;
         }
-        
+
+        public static string BuildSelectCommand(string tableName, string fields, string whereConditions = "") 
+        {
+            if (!string.IsNullOrEmpty(tableName))
+                return "Error: param \"tableName\" is empty!";
+
+            if (!string.IsNullOrEmpty(tableName))
+                return "Error: param \" fields\" is empty!";
+
+            var sql = $"SELECT {fields} FROM {tableName}";
+
+            if (!string.IsNullOrEmpty(whereConditions))
+            {
+                sql += $" WHERE {whereConditions}";
+            }
+
+            return sql;
+        }
+
     }
 }

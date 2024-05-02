@@ -68,6 +68,8 @@ builder.Services.AddScoped<CategoryDTO>();
 //builder.Services.AddScoped<IDBService<IDto>>();
 //builder.Services.AddScoped(typeof(IDBService<IDto>), typeof(CategoriesService));
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<IPagesService, PagesService>();
+builder.Services.AddScoped<IContentService, ContentService>();
 //builder.Services.AddScoped<IDBService<CategoryDTO>, CategoriesService>();
 builder.Services.AddScoped<IServiceFactory, ServiceFactory>();
 //DBService<CategoryDTO>, ICategoriesService

@@ -10,8 +10,8 @@ namespace Services.FND
     public class CategoriesService : DBService<CategoryDTO>, ICategoriesService//, IBaseService<IDto>
     {
         private ODDANP _odp;
-        private string error ;
-        private string db_prefix = "db_nsk.";
+        //private string error ;
+        //private string db_prefix = "db_nsk.";
 
         public CategoriesService(ODDANP odp):base(odp, "categories") 
         { 
@@ -37,7 +37,7 @@ namespace Services.FND
             return lst;
         }
 
-        public override List<CategoryDTO> getHierarchyLst()
+        public  List<CategoryDTO> getHierarchyLst()
         {
 
             

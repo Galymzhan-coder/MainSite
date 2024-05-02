@@ -15,7 +15,9 @@ namespace Services.Factory
         private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<string, (string, Type, Type)> _serviceTypes = new Dictionary<string, (string, Type, Type)>
         {
-            { "category", ("categories", typeof(ICategoriesService), typeof(CategoryDTO)) }
+            { "category",   ("categories", typeof(ICategoriesService), typeof(CategoryDTO)) },
+            { "text_pages", ("pages", typeof(IPagesService), typeof(PagesDTO)) },
+            { "contents",   ("content", typeof(IContentService), typeof(ContentDTO)) }
         };
 
         public ServiceFactory(IServiceProvider serviceProvider)

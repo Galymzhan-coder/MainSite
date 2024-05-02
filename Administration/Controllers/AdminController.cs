@@ -13,8 +13,8 @@ namespace Administration.Controllers
     public class AdminController : Controller
     {
         private readonly CategoriesService _categoriesService;
-        private readonly IDBService<IDto> _dbService;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IDBIerarchyService<IDto> _dbService;
+        //private readonly IServiceProvider _serviceProvider;
         private readonly IServiceFactory _serviceFactory;
 
         private readonly Dictionary<string, (string,Type, Type)> _serviceTypes = new Dictionary<string, (string,Type, Type)>
@@ -36,9 +36,8 @@ namespace Administration.Controllers
         }
         */
         
-        public AdminController(IServiceProvider serviceProvider, IServiceFactory serviceFactory)
-        {
-            _serviceProvider = serviceProvider;
+        public AdminController(IServiceFactory serviceFactory)
+        {        
             _serviceFactory = serviceFactory;
         }
         /*

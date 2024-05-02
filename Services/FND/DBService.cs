@@ -6,7 +6,7 @@ using Models.DTO.Interfaces;
 
 namespace Services.FND
 {
-    public abstract class DBService<T> : IDBService<T> where T : IDto, new()
+    public abstract class DBService<T> : IBaseService<T>, IPagesCount where T : IDto, new()//IDBIerarchyService<T> where T : IDto, new()
     {
         private ODDANP _odp;
         private string error ;
@@ -21,7 +21,7 @@ namespace Services.FND
 
         public abstract IEnumerable<T> Index();
 
-        public abstract List<T> getHierarchyLst();
+        //public abstract List<T> getHierarchyLst();
 
         public abstract T? getItem(int id);
 
@@ -87,6 +87,18 @@ namespace Services.FND
             return item;
 
         }
+
+        public int GetPagesCount(int rowCount, string whereCond = "")
+        {
+            string err = string.Empty;
+
+            var sql = SqlCommandBuilder.BuildSelectCommand($"{db_prefix}{_tableName}", $"(count(*)/{rowCount} + 1)", $"{(string.IsNullOrEmpty(whereCond) ? "" : $"and {whereCond}")}");
+
+            var res = Convert.ToInt32(_odp.Routine.QueryAsResultArray(sql, ref err).FirstOrDefault());
+
+            return res;
+        }
+
        /*
         public T? getItem(int id, string whereCond)
         {
