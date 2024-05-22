@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface IContentService:IBaseService<ContentDTO>
+    public interface IContentService: IBasePageService<ContentDTO>//IBaseService<ContentDTO>
     {
     }
 }

@@ -33,14 +33,18 @@ app.Run();
 using Administration.Helpers;
 using Administration.Interfaces;
 using Administration.Services;
+using LoggingService;
 using Microsoft.OpenApi.Models;
 //using Models.DTO.Interfaces;
 using Models.Entities;
 using Models.FFIFND;
+using NLog.Web;
 using Services.Factory;
 using Services.Factory.Interfaces;
 using Services.FND;
 using Services.FND.Interfaces;
+using Services.SQLCommandBuilder.Interfaces;
+using Services.SQLCommandBuilder.PgSQLCommands;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Diagnostics;
 
@@ -72,6 +76,14 @@ builder.Services.AddScoped<IPagesService, PagesService>();
 builder.Services.AddScoped<IContentService, ContentService>();
 //builder.Services.AddScoped<IDBService<CategoryDTO>, CategoriesService>();
 builder.Services.AddScoped<IServiceFactory, ServiceFactory>();
+
+
+builder.Services.AddScoped<ISQLReadCommands, CPgReadCommands>();
+builder.Services.AddScoped<ISQLUpdateCommands, CPgUpdateCommands>();
+builder.Services.AddScoped<ISQLCreateCommands, CPgCreateCommands>();
+builder.Services.AddScoped<ISQLDeleteCommands, CPgDeleteCommands>();
+builder.Services.AddScoped<ILogService, LogService>();
+
 //DBService<CategoryDTO>, ICategoriesService
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddCors(options =>
@@ -110,6 +122,10 @@ builder.Logging.AddConsole();
 
 builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
 
+var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
+
 
 var app = builder.Build();
 
@@ -141,6 +157,7 @@ app.UseSwaggerUI(c =>
     c.ConfigObject.DefaultModelsExpandDepth = 2;
     c.ConfigObject.DisplayRequestDuration = true;
 });
+
 
 //app.MapRazorPages();
 

@@ -50,7 +50,7 @@ namespace Services.FND
             if (dto == null)
                 return;
 
-            string sql = SqlCommandBuilder.BuildUpdateCommand<T>(_tableName, id, dto);
+            string sql = SqlCommandBuilder.BuildUpdateCommand<T>(_tableName, id, dto, null);
 
             _odp.Routine.UpdateFromSql( sql, ref error);
         }

@@ -3,9 +3,10 @@ import store from "@/store";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import category from '../views/category/Category';
-
-import textPages from '../views/TextPages/TextPages';
 import categoryEdit from '../views/category/CategoryEdit';
+
+import  textPages  from '../views/TextPages/TextPages';
+import  textPagesEdit  from '../views/TextPages/TextPagesEdit';
 
 const routes = [
   {
@@ -55,7 +56,7 @@ const routes = [
       {
         name: 'TextPagesEdit',
         path: '/TextPagesEdit/:id',
-        component: categoryEdit,
+        component: textPagesEdit,
       },
       
     ],

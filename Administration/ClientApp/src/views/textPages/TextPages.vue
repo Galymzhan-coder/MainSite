@@ -63,7 +63,7 @@
       onMounted(async () => {
         try {
           //const data = await apiService.fetchData('Index');
-          const data = await apiService.fetchDataByType('Index', 'contents');
+          const data = await apiService.fetchDataByTypeLang('Index', 'contents', 1);
 
           items.value = data;//data.sort((a,b) => a.id - b.id);
         } catch (error) {

@@ -94,7 +94,7 @@
 
   onMounted(async () => {
     try {
-      const data = await apiService.fetchDataByType('GetIerarchyList','category');
+      const data = await apiService.fetchDataByType('GetIerarchyList', 'category');
       items.value = data;
       //console.log("router=", router, ", id=", route.params.id);
       //selectedItem = ref(items.value.find(item => item.id === itemsEdit.parentId)?.title || null);
@@ -102,7 +102,7 @@
 
       let id = route.params.id;
       //const editData = await apiService.fetchDataById('GetCategoryItem', id);
-      const editData = await apiService.fetchDataByTypeId('GetItem', 'category' , id);
+      const editData = await apiService.fetchDataByTypeId('GetItem', 'category', id);
       itemsEdit.value = editData;
       selectedItem = items.value.find(item => item.id === editData.parent_id);
 
@@ -114,7 +114,7 @@
 
       //itemsEdit.value.is_active = itemsEdit.value.is_active === 1 ? true : false;
 
-      console.log("CategoryEdit id=", id,", route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData, " , itemsEdit.value.description=", itemsEdit.value.description);
+      console.log("CategoryEdit id=", id, ", route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData, " , itemsEdit.value.description=", itemsEdit.value.description);
       console.log("itemsEdit=", itemsEdit);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -202,7 +202,7 @@
     } catch (error) {
       console.log("saveItem, sendData error = ", error);
     }
-    
+
     emit('save', formData.value);
     goToPage('/category');
   }
@@ -251,7 +251,7 @@
     }
   }
 
-  
+
   const state = reactive({
     dynamicComponent: null,
     content: '<p>Initial Content</p>',
@@ -311,7 +311,7 @@
     quillInstance.value = quill;
 
     //if (itemsEdit.value && itemsEdit.value.description) {
-      content = itemsEdit.value.description;
+    content = itemsEdit.value.description;
     //}
     let delta = quill.clipboard.convert(content);
     quill.setContents(delta, 'silent');
@@ -325,12 +325,12 @@
     state._content = html;
     itemsEdit.value.description = html;
 
-   
+
   }
-    /*
-  setTimeout(() => {
-    state.disabled = true
-  }, 2000)*/
+  /*
+setTimeout(() => {
+  state.disabled = true
+}, 2000)*/
 
 
 </script>

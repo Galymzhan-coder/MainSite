@@ -11,21 +11,41 @@ using System.Threading.Tasks;
 namespace Services.Utils
 {
     public class SqlCommandBuilder
-    {
-        public static string BuildUpdateCommand<T>(string tabName,int id, T dto) where T : IDto
+    {/*
+        public static string BuildUpdateCommand<T>(string tabName,int id, T dto, List<string> exclude_fields) where T : IDto
         {
-            /*
-            string tabName = typeof(T).Name;
-            if (tabName.EndsWith("DTO"))
-                tabName = tabName[..^3];
-            */
             var sql = new StringBuilder($"UPDATE {tabName} SET ");
 
             var properties = typeof(T).GetProperties();
             var parameters = new List<string>();
             foreach (var property in properties)
             {
+                if (lst?.Contains(property.Name) == true)
+                    continue;
                 // Получаем значение свойства для текущего объекта dto
+                var value = property.GetValue(dto);
+                var formattedValue = FormatSqlValue(value);
+                parameters.Add($"{property.Name} = {formattedValue}");
+            }
+
+            sql.Append(string.Join(", ", parameters));
+            sql.Append($" WHERE id = {id}");
+
+            return sql.ToString();
+        }
+        */
+        public static string BuildUpdateCommand<T>(string tableName, int id, T dto, List<string> excludeFields = null) where T : IDto
+        {
+            var sql = new StringBuilder($"UPDATE {tableName} SET ");
+            var properties = typeof(T).GetProperties();
+            var parameters = new List<string>();
+
+            foreach (var property in properties)
+            {
+                // Пропускаем свойства, которые указаны в списке исключений
+                if (excludeFields?.Contains(property.Name) == true)
+                    continue;
+
                 var value = property.GetValue(dto);
                 var formattedValue = FormatSqlValue(value);
                 parameters.Add($"{property.Name} = {formattedValue}");

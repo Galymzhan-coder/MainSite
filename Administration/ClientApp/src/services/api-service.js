@@ -86,6 +86,16 @@ export default class ApiService {
     }
   }
 
+  async fetchDataByTypeLang(url, type, lang_id) {
+    try {
+      const responce = await axios.get(host + url, { params: { type: type, lang_id: lang_id } });
+      return responce.data;
+    } catch (error) {
+      console.error('Error fetching data by type:', error);
+      throw error;
+    }
+  }
+
   async fetchDataByTypeId(url, type, id) {
     try {
       const responce = await axios.get(host + url, { params: { type: type, id: id } });

@@ -1,5 +1,6 @@
 ﻿//using Administration.Factories.Interfaces;
 using Asp.Versioning;
+using LoggingService;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTO;
 using Models.DTO.Interfaces;
@@ -14,10 +15,11 @@ namespace Administration.Controllers
     {
         private readonly CategoriesService _categoriesService;
         private readonly IDBIerarchyService<IDto> _dbService;
+        private readonly ILogService _logService;
         //private readonly IServiceProvider _serviceProvider;
         private readonly IServiceFactory _serviceFactory;
-
-        private readonly Dictionary<string, (string,Type, Type)> _serviceTypes = new Dictionary<string, (string,Type, Type)>
+        /*
+        private readonly Dictionary<string, (string, Type, Type)> _serviceTypes = new Dictionary<string, (string, Type, Type)>
         {
             { "category", ("categories",typeof(ICategoriesService),typeof(CategoryDTO)) }
         };
@@ -35,10 +37,11 @@ namespace Administration.Controllers
             _dbService = dbService;
         }
         */
-        
-        public AdminController(IServiceFactory serviceFactory)
-        {        
+
+        public AdminController(IServiceFactory serviceFactory, ILogService logService)
+        {
             _serviceFactory = serviceFactory;
+            _logService = logService;
         }
         /*
         public AdminController(IServiceFactory serviceFactory)
@@ -54,50 +57,77 @@ namespace Administration.Controllers
             return Ok(lst);
         }
         */
-        
+
         [HttpGet("Index"), ApiVersion("1")]
-        public IActionResult Index(string type)
+        public IActionResult Index(string type, int lang_id=1)
         {
-            var service = _serviceFactory.GetService(type); 
+            try
+            {
+                var service = _serviceFactory.GetService(type);
 
-            if(service == null)
-                return NotFound($"Service for type '{type}' not found.");
+                if (service == null)
+                    return NotFound($"Service for type '{type}' not found.");
 
-            
-            var lst = service.Index();
+                
+                var lst = service.Index(lang_id);
                 return Ok(lst);
-            
-            
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.Index() :{ex.Message}");
+
+                return StatusCode(500, "Internal Server Error!");
+            }
+
+
+
         }
 
         [HttpGet("GetIerarchyList"), ApiVersion("1")]
         public IActionResult GetIerarchyList(string type)
         {
-            var service = _serviceFactory.GetService(type);
+            try
+            {
+                var service = _serviceFactory.GetService(type);
 
-            if (service == null)
-                return NotFound($"GetIerarchyList. Service for type '{type}' not found.");
+                if (service == null)
+                    return NotFound($"GetIerarchyList. Service for type '{type}' not found.");
 
-            var lst = service.getHierarchyLst();
-            return Ok(lst);            
+                var lst = service.getHierarchyLst();
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.GetIerarchyList() :{ex.Message}");
+                return StatusCode(500, "Internal Server Error!");
+            }
 
         }
 
         [HttpGet("GetItem"), ApiVersion("1")]
-        public IActionResult GetItem(string type, int id)
+        public IActionResult GetItem(string type, int id, int lang_id = 1)
         {
-            var service = _serviceFactory.GetService(type);
+            try
+            {
+                var service = _serviceFactory.GetService(type);
 
-            if (service == null)
-                return NotFound($"GetItem. Service for type '{type}' not found.");
+                if (service == null)
+                    return NotFound($"GetItem. Service for type '{type}' not found.");
 
-            var item = service.getItem(id);
-            return Ok(item);
+                var item = service.getItem(id, lang_id);
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.GetItem() :{ex.Message}");
+
+                return StatusCode(500, "Internal Server Error! ");
+            }
 
         }
-        
+
         [HttpPost("Update"), ApiVersion("1")]
-        public IActionResult Update(string type, int id, [FromBody] dynamic json)
+        public IActionResult Update(string type, int id, [FromBody] dynamic json,  int lang_id)
         {
             var service = _serviceFactory.GetService(type);
 
@@ -111,19 +141,23 @@ namespace Administration.Controllers
 
             try
             {
-                var dto = JsonConvert.DeserializeObject(json.ToString(), _serviceFactory.GetClass(type) , settings);
+                var dto = JsonConvert.DeserializeObject(json.ToString(), _serviceFactory.GetClass(type), settings);
 
-                service.update(id, dto);
-                
+                service.update(id, dto, lang_id);
+
                 return Ok();
-                
+
             }
             catch (JsonException je)
             {
+                _logService.LogInfo($"AdminController.Update() JsonException: {je.Message}");
+
                 return BadRequest($"Update. JSON parsing error: {je.Message}");
             }
             catch (Exception ex)
             {
+                _logService.LogInfo($"AdminController.Update() Exception: {ex.Message}");
+
                 return BadRequest($"Update. An error occurred: {ex.Message}");
             }
         }
