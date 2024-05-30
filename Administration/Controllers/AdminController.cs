@@ -127,7 +127,7 @@ namespace Administration.Controllers
         }
 
         [HttpPost("Update"), ApiVersion("1")]
-        public IActionResult Update(string type, int id, [FromBody] dynamic json,  int lang_id)
+        public IActionResult Update(string type, int id, [FromBody] dynamic json,  int lang_id=1)
         {
             var service = _serviceFactory.GetService(type);
 
@@ -160,6 +160,41 @@ namespace Administration.Controllers
 
                 return BadRequest($"Update. An error occurred: {ex.Message}");
             }
+        }
+
+        [HttpPost("Create"), ApiVersion("1")]
+        public IActionResult Create(string type, [FromBody] dynamic json, int lang_id=1) 
+        {
+            var service = _serviceFactory.GetService(type);
+
+            if (service == null)
+                return NotFound($"Create. Service for type '{type}'");
+
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
+
+            try
+            {
+                var dto = JsonConvert.DeserializeObject(json.ToString(), _serviceFactory.GetClass(type), settings);
+
+                service.create(dto,lang_id);
+            }
+            catch (JsonException je)
+            {
+                _logService.LogInfo($"AdminController.Create() JsonException: {je.Message}");
+
+                return BadRequest($"Create. JSON parsing error: {je.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.Create() Exception: {ex.Message}");
+
+                return BadRequest($"Create. An error occured: {ex.Message}");
+            }
+
+            return Ok();
         }
 
         /*

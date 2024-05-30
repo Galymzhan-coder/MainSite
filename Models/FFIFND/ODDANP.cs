@@ -27,6 +27,11 @@ namespace Models.FFIFND
         bool UpdateFromSql(string sql, ref string message);
         //decimal UpdateFromIUFValues<T>(T model, ref string message);
         bool ExecTransaction(string[] sqlcommands, ref string message);
+
+        int ExecReturningTransaction(string[] sqlcommands, ref string message);
+
+        public Dictionary<string, object> ExecReturningTransaction(string[] sqlcommands, string[] returningFields, ref string message);
+
         byte[] QueryBlobValue(string tblname, string blobfield, string whereclause, ref string message);
         bool UpdateBlobValue(string tblname, string blobfield, byte[] blobvalue, string whereclause, ref string message);
         IEnumerable<string> QueryAsResultArray(string tblname, string listfield, string whereclause, ref string message);
@@ -961,6 +966,97 @@ namespace Models.FFIFND
             }
             return res;
         }
+
+        public int ExecReturningTransaction(string[] sqlcommands, ref string message)
+        {
+            int res = 0;
+            using (var conn = new NpgsqlConnection(_rstring))
+            {
+                conn.Open();
+                using (NpgsqlCommand cmd = conn.CreateCommand())
+                {
+                    NpgsqlTransaction transaction = conn.BeginTransaction(IsolationLevel.ReadCommitted);
+                    cmd.Transaction = transaction;
+
+                    try
+                    {
+                        for (int i = 0; i < sqlcommands.Length; i++)
+                        {
+                            cmd.CommandText = sqlcommands[i];
+
+                            if (sqlcommands[i].TrimStart().StartsWith("INSERT", StringComparison.OrdinalIgnoreCase))
+                            {
+                                res = Convert.ToInt32(cmd.ExecuteScalar());
+                            }
+                            else
+                            {
+                                cmd.ExecuteNonQuery();
+                                res = 0;
+                            }
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        message = e.Message;
+                        res = 0; 
+                    }
+                }
+            }
+            return res;
+        }
+
+
+        public Dictionary<string, object> ExecReturningTransaction(string[] sqlcommands, string[] returningFields, ref string message)
+        {
+            var results = new Dictionary<string, object>();
+            using (var conn = new NpgsqlConnection(_rstring))
+            {
+                conn.Open();
+                using (NpgsqlCommand cmd = conn.CreateCommand())
+                {
+                    NpgsqlTransaction transaction = conn.BeginTransaction(IsolationLevel.ReadCommitted);
+                    cmd.Transaction = transaction;
+
+                    try
+                    {
+                        for (int i = 0; i < sqlcommands.Length; i++)
+                        {
+                            cmd.CommandText = sqlcommands[i];
+
+                            if (sqlcommands[i].TrimStart().StartsWith("INSERT", StringComparison.OrdinalIgnoreCase) && returningFields.Length > 0)
+                            {
+                                cmd.CommandText += $" RETURNING {string.Join(", ", returningFields)}";
+                                using (var reader = cmd.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        for (int j = 0; j < returningFields.Length; j++)
+                                        {
+                                            results[returningFields[j]] = reader[returningFields[j]];
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        message = e.Message;
+                        results.Clear();
+                    }
+                }
+            }
+            return results;
+        }
+
         public byte[] QueryBlobValue(string tblname, string blobfield, string whereclause, ref string message)
         {
             try

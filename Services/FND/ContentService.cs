@@ -58,20 +58,35 @@ namespace Services.FND
             try
             {
                 
-                update< ContentDTO>(id,"content", content, "meta_keywords,meta_title,meta_description", lang_id);
+                update<ContentDTO>(id,"content", content, "title,text,meta_keywords,meta_title,meta_description", lang_id);
 
-                update("content_translations", $" content_id ={id} && lang_id={lang_id}", content, "id, title , text, sefname , is_active , create_date , update_date, meta_image");
+                update<ContentDTO>("content_translations", $" content_id ={id} and lang_id={lang_id}", content, "Id, sefname , is_active , create_date , update_date, meta_image");
             }
             catch
             {
                 throw;
             }
-            //string sql = SqlCommandBuilder.BuildUpdateCommand<CategoryDTO>(tabName, id, category);
-            //update(int id, string tableName, IDto dto, string exclude_fields)
-
-            //_odp.Routine.UpdateFromSql(sql, ref error);
         }
 
+        public override void create(ContentDTO dto, int lang_id)
+        {
+            if (dto == null)
+                return;
+
+            var content = dto as ContentDTO;
+
+
+            var idContent = create<ContentDTO>("content", dto, "title,text,meta_keywords,meta_title,meta_description", "id");
+
+
+            ContentTranslationsDTO contentDTO = new ContentTranslationsDTO() { content_id = Convert.ToInt32(idContent["id"]), lang_id = lang_id, text =  content.text ?? "", title = content.title?? "",
+                                                                        meta_description = content.meta_description ?? "", meta_keywords = content.meta_keywords ?? "", meta_title = content.meta_title ?? ""};
+
+            create<ContentTranslationsDTO>("content_translations", contentDTO, "title,text,meta_keywords,meta_title,meta_description", "content_id,lang_id");
+
+            throw new NotImplementedException();
+
+        }
 
     }
 }

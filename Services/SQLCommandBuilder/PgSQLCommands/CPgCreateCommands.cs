@@ -13,18 +13,48 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
     {
         public string BuildInsertCMD<T>(string table, T dto) where T : IDto// NOT READY
         {
-            var sql = new StringBuilder($"UPDATE {table} SET ");
+            var sql = new StringBuilder($"Insert into {table} ");
             var properties = typeof(T).GetProperties();
             var parameters = new List<string>();
+            var values = new List<string>();
 
             foreach (var property in properties)
             {
                 var value = property.GetValue(dto);
                 var formattedValue = FormatSqlValue(value);
-                parameters.Add($"{property.Name} = {formattedValue}");
+                parameters.Add($"{property.Name}");
+                values.Add($"{formattedValue}");
             }
 
-            sql.Append(string.Join(", ", parameters));
+            sql.Append($"({string.Join(", ", parameters)}) ");
+            sql.Append($" values({string.Join(", ", values)}) ");
+            //sql.Append($" WHERE id = {id}");
+
+            return sql.ToString();
+        }
+
+        public string BuildInsertCMD<T>(string table, T dto, string excludeFields) where T : IDto// NOT READY
+        {
+            var sql = new StringBuilder($"Insert into {table} ");
+            var properties = typeof(T).GetProperties();
+            var parameters = new List<string>();
+            var values = new List<string>();
+
+            var arr_exclude = excludeFields.Replace(" ", "").Split(',');
+
+            foreach (var property in properties)
+            {
+                // Пропускаем свойства, которые указаны в списке исключений
+                if (arr_exclude?.Contains(property.Name) == true)
+                    continue;
+                var value = property.GetValue(dto);
+                var formattedValue = FormatSqlValue(value);
+                parameters.Add($"{property.Name}");
+                values.Add($"{formattedValue}");
+            }
+
+            sql.Append($"({string.Join(", ", parameters)}) ");
+            sql.Append($" values({string.Join(", ", values)}) ");
             //sql.Append($" WHERE id = {id}");
 
             return sql.ToString();
