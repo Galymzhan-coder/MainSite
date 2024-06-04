@@ -33,7 +33,7 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
             return sql.ToString();
         }
 
-        public string BuildInsertCMD<T>(string table, T dto, string excludeFields) where T : IDto// NOT READY
+        public string BuildInsertCMD<T>(string table, T dto, string excludeFields) where T : IDto
         {
             var sql = new StringBuilder($"Insert into {table} ");
             var properties = typeof(T).GetProperties();
@@ -55,6 +55,33 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
 
             sql.Append($"({string.Join(", ", parameters)}) ");
             sql.Append($" values({string.Join(", ", values)}) ");
+            //sql.Append($" WHERE id = {id}");
+
+            return sql.ToString();
+        }
+
+        public string BuildInsertWithReturningIdCMD<T>(string table, T dto, string excludeFields, string returningFields) where T : IDto
+        {
+            var sql = new StringBuilder($"Insert into {table} ");
+            var properties = typeof(T).GetProperties();
+            var parameters = new List<string>();
+            var values = new List<string>();
+
+            var arr_exclude = excludeFields.Replace(" ", "").Split(',');
+
+            foreach (var property in properties)
+            {
+                // Пропускаем свойства, которые указаны в списке исключений
+                if (arr_exclude?.Contains(property.Name) == true)
+                    continue;
+                var value = property.GetValue(dto);
+                var formattedValue = FormatSqlValue(value);
+                parameters.Add($"{property.Name}");
+                values.Add($"{formattedValue}");
+            }
+
+            sql.Append($"({string.Join(", ", parameters)}) ");
+            sql.Append($" values({string.Join(", ", values)}) returning {returningFields}");
             //sql.Append($" WHERE id = {id}");
 
             return sql.ToString();

@@ -1,6 +1,8 @@
-﻿namespace Models.Entities;
+﻿using Models.DTO.Interfaces;
 
-public partial class ContactsTranslationDTO
+namespace Models.Entities;
+
+public partial class ContactsTranslationDTO: IDto
 {
     public int ContactId { get; set; }
 
@@ -14,4 +16,14 @@ public partial class ContactsTranslationDTO
 
     public string? Director { get; set; }
 
+
+    public void SetDefaultValues()
+    {
+        ContactId = 0;
+        LangId = 1;
+        Title = null; 
+        Address = null; 
+        WorkHours = null; 
+        Director = null;        
+    }
 }

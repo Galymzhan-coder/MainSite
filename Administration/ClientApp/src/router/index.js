@@ -1,5 +1,4 @@
 import store from "@/store";
-//import { h, resolveComponent } from 'vue'
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import category from '../views/category/Category';

@@ -9,5 +9,7 @@ namespace Services.SQLCommandBuilder.Interfaces
     public interface ISQLDeleteCommands
     {
         string BuildDeleteCMD(string table, int id, string whereConditions = "");
+
+        string BuildDeleteCMD(string table, string whereConditions);
     }
 }

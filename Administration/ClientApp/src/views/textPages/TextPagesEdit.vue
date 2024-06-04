@@ -102,7 +102,14 @@
       const postData = { ...itemsEdit.value };
       console.log("saveItem postData=", postData);
 
-      await apiService.sendData(`Update?type=contents&id=${id}`, postData, 'post')
+      var req = `Update?type=contents&id=${id}`;
+
+      if (Number(id) == 0)
+      {
+        req = `Create?type=contents`;
+      }
+
+      await apiService.sendData(req, postData, 'post')
         .then(response => {
 
           console.log("saveItem response=", response);
@@ -129,10 +136,12 @@
 
     let id = route.params.id;
 
+    //if (Number(id) == 0)
+    //  return;
 
     const editData = await apiService.fetchDataByTypeId('GetItem', 'contents', id);
     itemsEdit.value = editData;
-    console.log('TextPagesEdit, itemsEdit.value=', itemsEdit.value);
+    console.log('TextPagesEdit, itemsEdit.value=', itemsEdit.value, ", id=", id);
 
     content = itemsEdit.value.text;
     state._content = itemsEdit.value.text;

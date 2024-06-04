@@ -47,5 +47,46 @@ namespace Models.DTO
         public bool is_mainpage { get; set; }
 
         public string? download_file { get; set; }
+
+        public void SetDefaultValues()
+        {
+            Id = 0;
+
+            user_id = 0;
+
+            category_id = 0;
+
+            title = string.Empty;
+
+            short_text = string.Empty;
+
+            text = string.Empty;
+
+            sefname = string.Empty;
+
+            image = string.Empty;
+
+            publish_date = DateTime.MinValue;
+
+            views = 0;
+
+            is_active = false;
+
+            create_date = DateTime.MinValue;
+
+            update_date = DateTime.MinValue;
+
+            meta_description = string.Empty;
+
+            meta_keywords = string.Empty;
+
+            meta_image = string.Empty;
+
+            meta_title = string.Empty;
+
+            is_mainpage = false;
+
+            download_file = string.Empty;
+        }
     }
 }

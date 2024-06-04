@@ -1,19 +1,38 @@
-﻿namespace Models.DTO;
+﻿using Models.DTO.Interfaces;
 
-public partial class AdminLogDTO
+namespace Models.DTO;
+
+public partial class AdminLogDTO: IDto
 {
-    public int Id { get; set; }
+    public int id { get; set; }
 
-    public int UserId { get; set; }
+    public int user_id { get; set; }
 
-    public string Module { get; set; } = null!;
+    public string module { get; set; } = null!;
 
-    public string Action { get; set; } = null!;
+    public string action { get; set; } = null!;
 
-    public int ItemId { get; set; }
+    public int item_id { get; set; }
 
-    public string? Message { get; set; }
+    public string? message { get; set; }
 
-    public DateTime CreateDate { get; set; }
+    public DateTime create_date { get; set; }
+    
+    public void SetDefaultValues()
+    {
+        id = 0;
 
+        user_id = 0;
+
+        module = string.Empty;
+
+        action = string.Empty;
+
+        item_id = 0;
+
+        message = string.Empty;
+
+        create_date = DateTime.MinValue;
+
+    }
 }

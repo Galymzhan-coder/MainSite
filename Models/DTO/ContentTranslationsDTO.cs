@@ -1,4 +1,5 @@
 ﻿using Models.DTO.Interfaces;
+using Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,24 @@ namespace Models.DTO
         public string meta_title { get; set; }
         public string meta_description {  get; set; }
         public string meta_keywords { get; set; }
+
+        public void SetDefaultValues()
+        {
+            content_id = 0;
+
+            lang_id = 1;
+
+            title = string.Empty; 
+
+            text = string.Empty; 
+
+            meta_title = string.Empty;
+
+            meta_description = string.Empty;
+
+            meta_keywords = string.Empty; 
+
+        }
 
     }
 }

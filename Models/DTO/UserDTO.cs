@@ -1,53 +1,81 @@
-﻿namespace Models.DTO;
+﻿using Models.DTO.Interfaces;
 
-public partial class UserDTO
+namespace Models.DTO;
+
+public partial class UserDTO : IDto
 {
-    public int Id { get; set; }
+    public int id { get; set; }
 
-    public string Username { get; set; } = null!;
+    public string username { get; set; } = null!;
 
-    public string Password { get; set; } = null!;
+    public string password { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
+    public string email { get; set; } = null!;
 
-    public string? FirstName { get; set; }
+    public string? first_name { get; set; }
 
-    public string? LastName { get; set; }
+    public string? last_name { get; set; }
 
-    public string? Role { get; set; }
+    public string? role { get; set; }
 
-    public short? IsActive { get; set; }
+    public bool is_active { get; set; }
 
-    public DateTime CreateDate { get; set; }
+    public DateTime create_date { get; set; }
 
-    public DateTime UpdateDate { get; set; }
+    public DateTime update_date { get; set; }
 
-    public string Phone { get; set; } = null!;
+    public string phone { get; set; } = null!;
 
-    public int? SmsCode { get; set; }
+    public int? sms_code { get; set; }
 
-    public string Iin { get; set; } = null!;
+    public string iin { get; set; } = null!;
 
-    public string? DocNum { get; set; }
+    public string? doc_num { get; set; }
 
-    public short? IsConnected { get; set; }
+    public short? is_connected { get; set; }
 
-    public string? OnesignalId { get; set; }
+    public string? onesignal_id { get; set; }
 
-    public int? SendinblueId { get; set; }
+    public int? sendinblue_id { get; set; }
 
-    public int? NskClientId { get; set; }
-    /*
-    public virtual ICollection<AdminLog> AdminLogs { get; set; } = new List<AdminLog>();
+    public int? nsk_client_id { get; set; }
 
-    public virtual ICollection<ManagerLog> ManagerLogs { get; set; } = new List<ManagerLog>();
 
-    public virtual ICollection<NskApiErrorLog> NskApiErrorLogs { get; set; } = new List<NskApiErrorLog>();
+    public void SetDefaultValues()
+    {
+        id = 0;
 
-    public virtual ICollection<Page> Pages { get; set; } = new List<Page>();
+        username = string.Empty;
 
-    public virtual ICollection<UserDevice> UserDevices { get; set; } = new List<UserDevice>();
+        password = string.Empty;
 
-    public virtual ICollection<UsersCode> UsersCodes { get; set; } = new List<UsersCode>();
-    */
+        email = string.Empty;
+
+        first_name = string.Empty;
+
+        last_name = string.Empty;
+
+        role = string.Empty;
+
+        is_active = false;
+
+        create_date = DateTime.MinValue;
+
+        update_date = DateTime.MinValue;
+
+        phone = string.Empty;
+
+        sms_code = 0;
+
+        iin = string.Empty;
+
+        doc_num = string.Empty;
+
+        onesignal_id = string.Empty;
+
+        sendinblue_id = 0;
+
+        nsk_client_id = 0;
+
+    }
 }

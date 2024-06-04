@@ -10,7 +10,7 @@ namespace Models.DTO
 {
     public class ContentDTO:IDto
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public string? title { get; set; }
         public string? text { get; set; }
         public string? sefname { get; set; }
@@ -21,5 +21,20 @@ namespace Models.DTO
         public string? meta_keywords { get; set; }
         public string? meta_image { get; set; }
         public string? meta_title { get; set; }
+
+        public void SetDefaultValues()
+        {
+            id = 0;
+            title = string.Empty;
+            text = string.Empty;
+            sefname = string.Empty;
+            is_active = false;
+            create_date = DateTime.MinValue;
+            update_date = DateTime.MinValue;
+            meta_description = string.Empty;
+            meta_keywords = string.Empty;
+            meta_image = string.Empty;
+            meta_title = string.Empty;
+        }
     }
 }

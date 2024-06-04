@@ -1,4 +1,5 @@
 ﻿using Models.DTO.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Models.DTO;
 
@@ -27,5 +28,32 @@ public partial class CategoryDTO:IDto
     public uint? Rgt { get; set; }
 
     public uint? Level { get; set; }
+
+    public void SetDefaultValues()
+    {
+        Id = 0;
+        
+        parent_id = 0;
+        
+        Title = string.Empty;  
+        
+        Sefname = string.Empty;  
+        
+        Description = string.Empty;
+
+        is_active = false;
+
+        Create_Date = DateTime.MinValue;
+
+        Update_Date = DateTime.MinValue;
+
+        Root = 0;
+
+        Lft = 0;
+
+        Rgt = 0;
+
+        Level = 0;
+    }
 
 }

@@ -1,18 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using Models.DTO;
 using Models.DTO.Interfaces;
 using Models.FFIFND;
-using MySqlX.XDevAPI.Common;
 using Services.FND.Interfaces;
 using Services.SQLCommandBuilder.Interfaces;
 using Services.SQLCommandBuilder.PgSQLCommands;
-using Services.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.FND.PgBase
 {
@@ -27,7 +19,7 @@ namespace Services.FND.PgBase
         ISQLCreateCommands _cmd_insert;
         ISQLUpdateCommands _cmd_update;
         ISQLDeleteCommands _cmd_delete;
-        
+
         public BasePageService(string tableName, IServiceProvider serviceProvider)
         {
             _odp = serviceProvider.GetService<ODDANP>() ?? throw new ArgumentNullException(nameof(ODDANP));
@@ -41,21 +33,28 @@ namespace Services.FND.PgBase
 
         public abstract IEnumerable<T> Index(int lang_id);
 
+        public abstract void update(int id, IDto dto, int lang_id);
+
+        public abstract void create(T dto, int lang_id);
+
+        public abstract T? getItem(int id, int lang_id);
+
+        public abstract bool delete(int id);
+
+
         protected IEnumerable<T> Index(string tableLst, string fields, string whereCond)
         {
             //string err = string.Empty;
             var sql = _cmd_select.BuildSelectCMD($"{db_prefix}{tableLst}", fields, whereCond);
             var lst = _odp.Routine.GetFromDatabase<T>(ref error, sql);
-            
-            if(!string.IsNullOrWhiteSpace(error))
+
+            if (!string.IsNullOrWhiteSpace(error))
                 throw new Exception(error);
 
             return lst ?? null;
         }
 
-        public abstract void create(T dto, int lang_id);
-
-        public Dictionary<string,string> create<T1>(string table, T1 dto, string excludeFields, string idFieldNames, string existCondition = "") where T1 : IDto
+        protected Dictionary<string, string>? create<T1>(string table, T1 dto, string excludeFields, string idFieldNames, string existCondition = "") where T1 : IDto
         {
             if (dto == null)
                 return null;
@@ -69,12 +68,11 @@ namespace Services.FND.PgBase
             {
                 sql = _cmd_select.BuildSelectCMD<T>($"{db_prefix}{table}", existCondition);
 
-                //string tblname, string whereclause, ref string message, string listfield = "*"
-                var res1 = _odp.Routine.QueryAsDictionary(table, existCondition, ref error, idFieldNames);// GetFromDatabase<CategoryDTO>(ref error, sql).FirstOrDefault();
+                var res1 = _odp.Routine.QueryAsDictionary(table, existCondition, ref error, idFieldNames);
 
-                ret = res1.Where(t=> idFieldsLst.Contains(t.Key)).ToDictionary<string,string>();
+                ret = res1.Where(t => idFieldsLst.Contains(t.Key)).ToDictionary<string, string>();
 
-                if(ret.Count() > 0)
+                if (ret.Count() > 0)
                 {
                     string whereClause = string.Join(" and ", ret.Select(t => $"{t.Key}={t.Value}").ToList());
                     sql = _cmd_update.BuildUpdateCMD<T1>(table, whereClause, dto, excludeFields);
@@ -86,14 +84,15 @@ namespace Services.FND.PgBase
                 }
 
                 return ret;
-                
+
             }
-            
+
             sql = _cmd_insert.BuildInsertCMD<T1>(table, dto, excludeFields);
+            //sql = _cmd_insert.BuildInsertWithReturningIdCMD<T1>(table, dto, excludeFields, idFieldNames);
 
-            ret = _odp.Routine.ExecReturningTransaction(new [] {sql}, idFieldsLst, ref error ).Select(t=>(t.Key,t.Value.ToString())).ToDictionary<string,string>();
+            ret = _odp.Routine.ExecReturningTransaction(new[] { sql }, idFieldsLst, ref error).Select(t => (t.Key, Convert.ToString(t.Value)??"")).ToDictionary<string, string>();
 
-            
+
 
             if (!string.IsNullOrWhiteSpace(error))
                 throw new Exception(error);
@@ -101,9 +100,9 @@ namespace Services.FND.PgBase
             return ret;
         }
 
-        public abstract void update(int id, IDto dto, int lang_id);
 
-        protected void update<T>(int id,string tableName, T dto, string exclude_fields, int lang_id) where T : IDto
+
+        protected void update<T>(int id, string tableName, T dto, string exclude_fields, int lang_id) where T : IDto
         {
             try
             {
@@ -117,13 +116,13 @@ namespace Services.FND.PgBase
                 if (!string.IsNullOrWhiteSpace(error))
                     throw new Exception(error);
             }
-            catch (Exception ex) 
-            { 
-                throw(new Exception(ex.Message));
+            catch (Exception ex)
+            {
+                throw (new Exception(ex.Message));
             }
         }
 
-        protected void update<T>(string tableName,string whereClause, T dto, string exclude_fields) where T : IDto
+        protected void update<T>(string tableName, string whereClause, T dto, string exclude_fields) where T : IDto
         {
             try
             {
@@ -143,22 +142,41 @@ namespace Services.FND.PgBase
             }
         }
 
-        public void delete(int id)
+        protected bool delete(string table, string whereClause)
         {
 
-        }
+            string sql = _cmd_delete.BuildDeleteCMD(table, whereClause);
 
-        public abstract T? getItem(int id, int lang_id);
+            if (!string.IsNullOrWhiteSpace(sql) && sql.Contains("Error: param"))
+                throw new ArgumentException(sql);
+
+            bool res = _odp.Routine.DeleteFromDB(table, whereClause, ref error);
+
+            if (!string.IsNullOrWhiteSpace(error))
+                throw new Exception(error);
+
+            return res;
+
+        }
 
         protected T? getItem(string tableLst, string fields, string whereCond)
         {
 
             var sql = _cmd_select.BuildSelectCMD($"{tableLst}", fields, $"{whereCond}");
 
-            var item = _odp.Routine.GetFromDatabase<T>(ref error, sql).FirstOrDefault();
+            var items = _odp.Routine.GetFromDatabase<T>(ref error, sql);
+
+            var item = items.FirstOrDefault();
 
             if (!string.IsNullOrWhiteSpace(error))
                 throw new Exception(error);
+
+            if (item == null)
+            {
+                item = new T();
+
+                item.SetDefaultValues();
+            }
 
             return item;
 

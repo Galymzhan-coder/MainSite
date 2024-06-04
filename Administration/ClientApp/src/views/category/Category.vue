@@ -49,20 +49,12 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
-  //import categoryEdit from './CategoryEdit.vue';
     import { useRouter } from 'vue-router';
     import ApiService from '../../services/api-service.js';
 
-    //const selectedItem = ref(null);
     const items = ref([]);
     const apiService = new ApiService();
-    /*
-  const items = ref([
-    { id: 1, name: 'Item 1', active: true },
-    { id: 2, name: 'Item 2', active: false },
-    { id: 3, name: 'Item 3', active: true },
-  ]);
-  */
+
     onMounted(async () => {
       try {
         //const data = await apiService.fetchData('Index');

@@ -9,8 +9,8 @@ namespace Administration.Models
         public string Token { get; set; } = string.Empty;
         public AuthenticateResponse(UserDTO user, string token)
         {
-            FirstName = user.FirstName;
-            LastName = user.LastName;
+            FirstName = user.first_name;
+            LastName = user.last_name;
             Token = token;
         }
     }

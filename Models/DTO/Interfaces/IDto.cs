@@ -8,5 +8,6 @@ namespace Models.DTO.Interfaces
 {
     public interface IDto
     {
+        void SetDefaultValues();
     }
 }

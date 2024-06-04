@@ -16,7 +16,7 @@ namespace Services.FND.Interfaces
 
         void update(int id, IDto dto, int lang_id);
         
-        void delete(int id);
+        bool delete(int id);
 
         T? getItem(int id, int lang_id);
 

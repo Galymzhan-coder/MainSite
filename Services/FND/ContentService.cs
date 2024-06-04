@@ -1,18 +1,11 @@
 ﻿using Models.DTO;
 using Models.DTO.Interfaces;
-using Models.FFIFND;
 using Services.FND.Interfaces;
 using Services.FND.PgBase;
-using Services.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.FND
 {
-    public class ContentService: BasePageService<ContentDTO>, IContentService//DBService<ContentDTO>
+    public class ContentService: BasePageService<ContentDTO>, IContentService
     {
 
         public ContentService(IServiceProvider serviceProvider)
@@ -38,7 +31,7 @@ namespace Services.FND
         {
             try
             {
-                var item = getItem("content c, content_translations ct", "c.id, ct.title , ct.text, c.sefname , c.is_active , c.create_date , c.update_date ,ct.meta_description , ct.meta_keywords,  ct.meta_title", $"c.id =ct.content_id and ct.lang_id={lang_id}");
+                var item = getItem("content c, content_translations ct", "c.id, ct.title , ct.text, c.sefname , c.is_active , c.create_date , c.update_date ,ct.meta_description , ct.meta_keywords,  ct.meta_title", $"c.id =ct.content_id and c.id={id} and ct.lang_id={lang_id}");
 
                 return item;
             }
@@ -52,6 +45,7 @@ namespace Services.FND
         public override void update(int id, IDto dto,int lang_id)
         {
             var content = dto as ContentDTO;
+
             if (content == null)
                 return;
 
@@ -60,7 +54,9 @@ namespace Services.FND
                 
                 update<ContentDTO>(id,"content", content, "title,text,meta_keywords,meta_title,meta_description", lang_id);
 
-                update<ContentDTO>("content_translations", $" content_id ={id} and lang_id={lang_id}", content, "Id, sefname , is_active , create_date , update_date, meta_image");
+                var contentTranslationsDTO = new ContentTranslationsDTO() { content_id = id, lang_id = lang_id, title = content.title??"", text = content.text??"", meta_description = content.meta_description??"", meta_keywords = content.meta_keywords??"", meta_title = content.meta_title??"" };
+
+                update<ContentTranslationsDTO>("content_translations", $" content_id ={id} and lang_id={lang_id}", contentTranslationsDTO, "");
             }
             catch
             {
@@ -76,15 +72,36 @@ namespace Services.FND
             var content = dto as ContentDTO;
 
 
-            var idContent = create<ContentDTO>("content", dto, "title,text,meta_keywords,meta_title,meta_description", "id");
+            var idContent = create<ContentDTO>("content", dto, "id,title,text,meta_keywords,meta_title,meta_description", "id");
 
 
             ContentTranslationsDTO contentDTO = new ContentTranslationsDTO() { content_id = Convert.ToInt32(idContent["id"]), lang_id = lang_id, text =  content.text ?? "", title = content.title?? "",
                                                                         meta_description = content.meta_description ?? "", meta_keywords = content.meta_keywords ?? "", meta_title = content.meta_title ?? ""};
 
-            create<ContentTranslationsDTO>("content_translations", contentDTO, "title,text,meta_keywords,meta_title,meta_description", "content_id,lang_id");
+            create<ContentTranslationsDTO>("content_translations", contentDTO, "", "content_id,lang_id");
+                        
+        }
 
-            throw new NotImplementedException();
+        public override bool delete(int id)
+        {
+            try
+            {
+
+                if (id < 0)
+                    return false;
+
+                if(delete("content_translations", $"content_id={id}"))
+                {
+                    return delete("content", $"id={id}");
+                }
+
+                return false;
+                
+            }
+            catch
+            {
+                throw;
+            }
 
         }
 
