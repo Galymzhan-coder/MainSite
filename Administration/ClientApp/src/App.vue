@@ -16,4 +16,7 @@
 .page-leave-to {
     opacity: 30%;
 }
+html, body {
+  overflow-x: hidden;
+}
 </style>

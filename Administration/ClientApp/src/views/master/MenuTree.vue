@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="bg-gray-800 cursor-pointer">
     <li v-for="menuItem in menuItems" :key="menuItem.id">
       <div @click="toggleChildren(menuItem)" v-if="!menuItem.children">
         <router-link :to="menuItem.path" :class="menuItem.routerClass" @click="toggleChildren(menuItem)">
@@ -7,7 +7,7 @@
           <div style="width: 150px; text-align: left;" class="ml-1">{{ menuItem.label }}</div>
         </router-link>
       </div>
-      <div :class="menuItem.routerClass" @click="toggleChildren(menuItem)" v-else>
+      <div :class="menuItem.routerClass" @click="toggleChildren(menuItem)"  v-else>
         <div v-html="menuItem.svg"></div>
         <div style="width: 150px; text-align: left;" class="ml-1">{{ menuItem.label }}</div>
         <div class="menu-down-open" :class="{'transform rotate-180': menuItem.showChildren, 'transform rotate-0': !menuItem.showChildren, 'transition-transform duration-300': true}">
@@ -24,8 +24,6 @@
 
 
 <script>
-
-
   export default {
     name: 'MenuTree',
     props: {
@@ -40,18 +38,23 @@
     },
     data() {
       return {
-        showChildren: false
+        showChildren: false,
+        lastMenuChildren: null,
       };
     },
     methods: {
       toggleChildren(menuItem) {
-        if (menuItem.children) {        
-          setTimeout(() => {
-            menuItem.showChildren = !menuItem.showChildren;
-          }, 200);
+        if (this.lastMenuChildren && this.lastMenuChildren !== menuItem) {
+          this.lastMenuChildren.showChildren = false;
         }
-      }
-    }
+        // Переключаем текущее состояние элемента
+        if (menuItem.children) {
+          menuItem.showChildren = !menuItem.showChildren;
+          // Обновляем ссылку на последний открытый элемент
+          this.lastMenuChildren = menuItem.showChildren ? menuItem : null;
+        }
+      },
+    },
   };
 </script>
 
@@ -64,4 +67,15 @@
   .menu-down-open {
     margin-left: auto;
   }
+
+.menu-item-enter-active, .menu-item-leave-active {
+  transition: max-height 0.5s ease;
+}
+
+.menu-item-enter, .menu-item-leave-to {
+  max-height: 0;
+  overflow: hidden;
+}
+
+
 </style>

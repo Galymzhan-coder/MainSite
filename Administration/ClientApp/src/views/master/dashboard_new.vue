@@ -1,26 +1,30 @@
 <template>
-  <div class="w-full h-full">
+  <div class="w-full h-full overflow-x-hidden">
     <!-- Side bar -->
 
     <div
-      class="fixed w-[300px] h-[calc(100vh-25px)] text-white top-0 left-0 z-10"
-      v-show="showSide"
+      class="fixed w-[300px] h-[calc(100vh-25px)] text-white top-0 left-0 z-10 transform transition-transform duration-500 ease-in-out"
+      :class="{ '-translate-x-full': !showSide, 'translate-x-0': showSide }"
     >
       <div
-        class="h-[50px] bg-gray-900 flex justify-start items-center w-[280px]"
+        class="h-[50px] bg-gray-700 w-[280px] border-2 border-gray-900 relative z-1 float-left flex items-center justify-center"
       >
-        <div class="px-[20px]">
-          <h3 class="font-bold text-xl">Admin dashbord</h3>
-        </div>
+          <h2 class="font-bold text-xl w-full text-center">Admin dashboard</h2>
       </div>
-      <div class="h-[calc(h-auto-50px)] bg-gray-800 py-[20px] w-[280px]">
-        <div class="flex flex-col justify-between h-full space-y-[10px]">
+      <div class="h-full bg-gray-700 w-[280px] overflow-auto">
+        <div class="flex flex-col justify-between h-[1000px] space-y-[10px]">
           <div class="flex flex-col justify-between">
-            <MenuTree :menuItems="menuItems" />
+            <MenuTree :menuItems="menuItems"/>
           </div>
 
           <!--<img :src="mySvgIcon" alt="MySvgIcon" />-->
 
+          <div class="h-full">
+
+          </div>
+
+
+          <!--
           <div class="h-[50px]">
             <div>
               <router-link
@@ -45,15 +49,16 @@
               </router-link>
             </div>
           </div>
+            -->
         </div>
       </div>
     </div>
     <div class="h-full w-full">
       <div
-        class="top-0 fixed h-[50px] bg-gray-100 flex items-center shadow-sm px-[20px] py-[10px] border-b z-10"
+        class="top-0 fixed h-[50px] bg-gray-100 flex items-center shadow-sm px-[20px] py-[10px] border-b z-10 transform transition-transform duration-500 ease-in-out"
         :class="{
-          'w-[calc(100%-280px)] left-[280px]': showSide,
-          'w-full left-0': !showSide,
+          'w-[calc(100%-280px)] translate-x-[280px]': showSide,
+          'w-full translate-x-0': !showSide,
         }"
       >
         <!-- Hamburger menu -->
@@ -188,10 +193,10 @@
       </div>
       <div class="h-full bg-gray-50 p-[20px] top-0">
         <div
-          class="absolute border border-gray-300 p-[20px] h-full border-none top-[50px]"
+          class="absolute border border-gray-300 p-[20px] h-full border-none top-[50px] transform transition-transform duration-500 ease-in-out"
           :class="{
-            'w-[calc(100%-280px)] left-[280px]': showSide,
-            'w-full left-0': !showSide,
+            'w-[calc(100%-280px)] translate-x-[260px]': showSide,
+            'w-[calc(100%-30px)] translate-x-0': !showSide,
           }"
         >
           <transition name="page" mode="out-in">
@@ -222,7 +227,7 @@ export default {
           id: 1,
           label: "Home",
           routerClass:
-            "inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium border-gray-200 bg-gray-700 hover:bg-gray-300 hover:text-gray-800 transition duration-400 ease-in-out",
+            "inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium border-gray-200 bg-gray-700 hover:bg-gray-300 hover:text-gray-800",
           path: "/home",
           svg:
             '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">' +
@@ -232,7 +237,7 @@ export default {
           id: 2,
           label: "Category and content",
           routerClass:
-            "inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium border-gray-200 bg-gray-700 hover:bg-gray-300 hover:text-gray-800 transition duration-400 ease-in-out",
+            "inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium border-gray-200 bg-gray-700 hover:bg-gray-300 hover:text-gray-800",
           path: "/category",
           svg: `<svg class="h-5 w-5 text-white-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="1.9" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  
                       <path stroke="none" d="M0 0h24v24H0z"/>  
@@ -246,7 +251,7 @@ export default {
               id: 3,
               label: "Category",
               routerClass:
-                "inline-flex relative items-center py-[10px] px-[50px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800 transition duration-400 ease-in-out",
+                "inline-flex relative items-center py-[10px] px-[50px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800",
               path: "/Category",
               svg: `<svg class="h-5 w-5 text-white-900"  width="21" height="21" viewBox="0 0 21 21" stroke-width="1.9" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  
                       <path stroke="none" d="M0 0h24v24H0z"/>  
@@ -782,10 +787,6 @@ export default {
 <style scoped>
 @import "../../assets/css/app.css";
 
-* {
-  margin: 0;
-  padding: 0;
-}
 .page-enter-active,
 .page-leave-active {
   transition: 0.5s;
@@ -795,4 +796,5 @@ export default {
 .page-leave-to {
   opacity: 30%;
 }
+
 </style>
