@@ -10,7 +10,7 @@ namespace Models.DTO
 {
     public class PagesDTO:IDto
     {
-        public int Id { get; set; }
+        public int id { get; set; }
 
         public int user_id { get; set; }
 
@@ -50,7 +50,7 @@ namespace Models.DTO
 
         public void SetDefaultValues()
         {
-            Id = 0;
+            id = 0;
 
             user_id = 0;
 

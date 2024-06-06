@@ -113,6 +113,8 @@
           console.log("saveItem, sendData error=", error);
         });
 
+      items.value = items.value.filter(item => item.id !== id);
+
     } catch (error) {
       console.log("saveItem, sendData error = ", error);
     }
