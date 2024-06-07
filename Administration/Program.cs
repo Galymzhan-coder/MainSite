@@ -83,6 +83,7 @@ builder.Services.AddScoped<ISQLUpdateCommands, CPgUpdateCommands>();
 builder.Services.AddScoped<ISQLCreateCommands, CPgCreateCommands>();
 builder.Services.AddScoped<ISQLDeleteCommands, CPgDeleteCommands>();
 builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddScoped<ILanguagesService, LanguagesService>();
 
 //DBService<CategoryDTO>, ICategoriesService
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));

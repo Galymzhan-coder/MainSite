@@ -15,5 +15,7 @@ namespace Services.Factory.Interfaces
         public Type GetInterface(string type);
 
         public Type GetClass(string type);
+
+        public List<string> GetServiceTypes();
     }
 }

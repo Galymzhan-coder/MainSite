@@ -13,11 +13,12 @@ namespace Services.Factory
     public class ServiceFactory : IServiceFactory
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly Dictionary<string, (string, Type, Type)> _serviceTypes = new Dictionary<string, (string, Type, Type)>
+        private readonly Dictionary<string, (string, Type, Type, string)> _serviceTypes = new Dictionary<string, (string, Type, Type, string)>
         {
-            { "category",   ("categories", typeof(ICategoriesService), typeof(CategoryDTO)) },
-            { "text_pages", ("pages", typeof(IPagesService), typeof(PagesDTO)) },
-            { "contents",   ("content", typeof(IContentService), typeof(ContentDTO)) }
+            { "category",   ("categories", typeof(ICategoriesService), typeof(CategoryDTO), "Категория") },
+            { "text_pages", ("pages", typeof(IPagesService), typeof(PagesDTO), "Статьи") },
+            { "contents",   ("content", typeof(IContentService), typeof(ContentDTO), "Текстовые страницы") },
+            { "language",   ("languages", typeof(ILanguagesService), typeof(LanguagesDTO), "Язык") }
         };
 
         public ServiceFactory(IServiceProvider serviceProvider)
@@ -46,6 +47,11 @@ namespace Services.Factory
         public Type GetClass(string type)
         {
             return _serviceTypes[type].Item3;
+        }
+
+        public List<string> GetServiceTypes()
+        {
+            return _serviceTypes.Select(k => $"{k.Key} - {k.Value.Item4}").ToList();
         }
     }
 }

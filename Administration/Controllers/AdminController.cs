@@ -24,6 +24,20 @@ namespace Administration.Controllers
             _logService = logService;
         }
 
+        [HttpGet("GetRequestTypes"), ApiVersion("1")]
+        public ActionResult GetRequestTypes() 
+        { 
+            try
+            {
+                return Ok(_serviceFactory.GetServiceTypes());
+            }catch (Exception ex)
+            {
+                _logService.LogError($"AdminController.GetRequestTypes() :{ex.Message}");
+
+                return StatusCode(500, $"Internal Server Error! - {ex.Message}");
+            }
+        }
+
         [HttpGet("Index"), ApiVersion("1")]
         public IActionResult Index(string type, int lang_id=1)
         {
