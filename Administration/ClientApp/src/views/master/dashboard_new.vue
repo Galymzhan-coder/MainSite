@@ -11,17 +11,13 @@
       >
           <h2 class="font-bold text-xl w-full text-center">Admin dashboard</h2>
       </div>
-      <div class="h-full bg-gray-700 w-[280px] overflow-auto">
-        <div class="flex flex-col justify-between h-[1000px] space-y-[10px]">
+      <div class="menu-container bg-gray-700 w-[280px] overflow-auto">
+        <div class="flex flex-col justify-between space-y-[10px] mb-10">
           <div class="flex flex-col justify-between">
             <MenuTree :menuItems="menuItems"/>
           </div>
 
           <!--<img :src="mySvgIcon" alt="MySvgIcon" />-->
-
-          <div class="h-full">
-
-          </div>
 
 
           <!--
@@ -81,7 +77,7 @@
         <!-- Search bar -->
         <div class="w-[calc(100%-30px)] flex">
           <!-- Search bar -->
-          <div class="w-[calc(100%-200px)] flex justify-center">
+          <div class="w-[calc(100%-200px)] flex justify-center transition-width duration-500 ease-in-out">
             <form class="flex items-center w-[500px]">
               <label for="voice-search" class="sr-only">Search</label>
               <div class="relative w-full">
@@ -106,25 +102,7 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Search Mockups, Logos"
                 />
-                <router-link
-                  to="/"
-                  class="flex absolute inset-y-0 right-0 items-center pr-3"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"
-                    />
-                  </svg>
-                </router-link>
+              
               </div>
             </form>
           </div>
@@ -796,5 +774,7 @@ export default {
 .page-leave-to {
   opacity: 30%;
 }
-
+.menu-container {
+  height: calc(100vh - 3rem); /* Высота экрана минус 2rem (20px) отступа */
+}
 </style>

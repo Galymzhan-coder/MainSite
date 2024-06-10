@@ -7,7 +7,7 @@
           <div style="width: 150px; text-align: left;" class="ml-1">{{ menuItem.label }}</div>
         </router-link>
       </div>
-      <div :class="menuItem.routerClass" @click="toggleChildren(menuItem)"  v-else>
+      <div :class="menuItem.routerClass" @click="toggleChildren(menuItem)" v-else>
         <div v-html="menuItem.svg"></div>
         <div style="width: 150px; text-align: left;" class="ml-1">{{ menuItem.label }}</div>
         <div class="menu-down-open" :class="{'transform rotate-180': menuItem.showChildren, 'transform rotate-0': !menuItem.showChildren, 'transition-transform duration-300': true}">
@@ -17,7 +17,18 @@
           </svg>
         </div>
       </div>
-        <MenuTree :menuItems="menuItem.children" v-if="menuItem.children && menuItem.showChildren" />
+      <transition
+        name="slide-fade"
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @after-enter="afterEnter"
+        @before-leave="beforeLeave"
+        @leave="leave"
+      >
+        <div v-if="menuItem.showChildren" class="overflow-hidden">
+          <MenuTree :menuItems="menuItem.children" />
+        </div>
+      </transition>
     </li>
   </ul>
 </template>
@@ -54,28 +65,37 @@
           this.lastMenuChildren = menuItem.showChildren ? menuItem : null;
         }
       },
+      beforeEnter(el) {
+        el.style.maxHeight = '0';
+      },
+      enter(el) {
+        el.style.maxHeight = `${el.scrollHeight}px`;
+        el.style.transition = 'max-height 0.5s ease-in-out';
+      },
+      afterEnter(el) {
+        el.style.maxHeight = 'none';
+      },
+      beforeLeave(el) {
+        el.style.maxHeight = `${el.scrollHeight}px`;
+      },
+      leave(el) {
+        el.style.maxHeight = '0';
+        el.style.transition = 'max-height 0.5s ease-in-out';
+      }
     },
   };
 </script>
 
 <style scoped>
-  @import '../../assets/css/app.css';
+@import '../../assets/css/app.css';
 
-  li {
-    margin: 0;
-  }
-  .menu-down-open {
-    margin-left: auto;
-  }
-
-.menu-item-enter-active, .menu-item-leave-active {
-  transition: max-height 0.5s ease;
+li {
+  margin: 0;
 }
-
-.menu-item-enter, .menu-item-leave-to {
-  max-height: 0;
+.menu-down-open {
+  margin-left: auto;
+}
+.slide-fade-enter-active, .slide-fade-leave-active {
   overflow: hidden;
 }
-
-
 </style>
