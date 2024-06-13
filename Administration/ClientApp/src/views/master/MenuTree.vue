@@ -26,7 +26,7 @@
         @leave="leave"
       >
         <div v-if="menuItem.showChildren" class="overflow-hidden">
-          <MenuTree :menuItems="menuItem.children" />
+          <MenuTree :menuItems="menuItem.children" class="menu-lists"/>
         </div>
       </transition>
     </li>
@@ -97,5 +97,8 @@ li {
 }
 .slide-fade-enter-active, .slide-fade-leave-active {
   overflow: hidden;
+}
+.menu-lists {
+  border-left: 4px solid blue;
 }
 </style>
