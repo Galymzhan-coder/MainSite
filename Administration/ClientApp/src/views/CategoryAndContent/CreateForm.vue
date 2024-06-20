@@ -1,10 +1,10 @@
 <template>
-    <TheHeadTitle :title="createTitle" />
+    <HeadTitle :title="createTitle" />
     <p>Abs</p>
 </template>
 
 <script setup>
-import TheHeadTitle from "@/components/TheHeadTitle.vue";
+import HeadTitle from "@/components/HeadTitle.vue";
 import { ref } from 'vue'
 
 const createTitle = ref('Создание статьи')

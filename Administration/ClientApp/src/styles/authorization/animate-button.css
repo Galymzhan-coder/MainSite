@@ -28,7 +28,7 @@ button {
   }
 
   button:after {
-    content: "Войти";
+    content: "";
   }
 
 .onclic {

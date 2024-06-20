@@ -13,5 +13,8 @@ namespace Services.SQLCommandBuilder.Interfaces
 
 
         string BuildSelectCMD(string tables, string fields, string whereConditions = "");
+
+        string BuildSelectPaginatedCMD(string tables, string fields, int page_num, int page_size, string whereConditions = "", string orderBy = "");
+
     }
 }

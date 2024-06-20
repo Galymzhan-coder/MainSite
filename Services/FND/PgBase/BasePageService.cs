@@ -10,15 +10,15 @@ namespace Services.FND.PgBase
 {
     public abstract class BasePageService<T> : IBasePageService<T> where T : IDto, new()
     {
-        private ODDANP _odp;
-        private string error;
-        private string db_prefix = "db_nsk.";
-        private string _tableName;
+        protected ODDANP _odp;
+        protected string error;
+        protected string db_prefix = "db_nsk.";
+        protected string _tableName;
 
-        ISQLReadCommands _cmd_select;
-        ISQLCreateCommands _cmd_insert;
-        ISQLUpdateCommands _cmd_update;
-        ISQLDeleteCommands _cmd_delete;
+        protected ISQLReadCommands _cmd_select;
+        protected ISQLCreateCommands _cmd_insert;
+        protected ISQLUpdateCommands _cmd_update;
+        protected ISQLDeleteCommands _cmd_delete;
 
         public BasePageService(string tableName, IServiceProvider serviceProvider)
         {

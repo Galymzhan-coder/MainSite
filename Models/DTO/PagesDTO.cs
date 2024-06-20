@@ -16,6 +16,8 @@ namespace Models.DTO
 
         public int category_id { get; set; }
 
+        public string? category { get; set; }
+
         public string? title { get; set; }
 
         public string? short_text { get; set; }
@@ -55,6 +57,8 @@ namespace Models.DTO
             user_id = 0;
 
             category_id = 0;
+
+            category = string.Empty;
 
             title = string.Empty;
 

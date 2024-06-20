@@ -40,8 +40,7 @@
             onclic: authStore.isClicked,
             validate: authStore.isValidated,
           }"
-          type="submit"
-        ></button>
+          type="submit">Войти</button>
       </div>
     </Form>
     <div class="version">version 3.0.0</div>

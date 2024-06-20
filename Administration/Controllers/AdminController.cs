@@ -63,6 +63,31 @@ namespace Administration.Controllers
 
         }
 
+        [HttpGet("IndexPaginated"), ApiVersion("1")]
+        public IActionResult Index(string type, int page_num = 1,int page_size = 20, int lang_id = 1)
+        {
+            try
+            {
+                var service = _serviceFactory.GetService(type);
+
+                if (service == null)
+                    return NotFound($"Service for type '{type}' not found.");
+
+
+                var lst = service.IndexPaginated(page_num, page_size, lang_id);
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.Index() :{ex.Message}");
+
+                return StatusCode(500, "Internal Server Error!");
+            }
+
+
+
+        }
+
         [HttpGet("GetIerarchyList"), ApiVersion("1")]
         public IActionResult GetIerarchyList(string type)
         {

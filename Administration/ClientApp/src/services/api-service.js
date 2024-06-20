@@ -105,5 +105,15 @@ export default class ApiService {
       throw error;
     }
   }
+
+  async fetchPartOfDataByTypeLang(url, type, pageNum, rowsPerPage, lang_id) {
+    try {
+      const responce = await axios.get(host + url, { params: { type: type, page_num: pageNum, page_size: rowsPerPage, lang_id: lang_id } });
+      return responce.data;
+    } catch (error) {
+      console.error('Error fetching data by id:', error);
+      throw error;
+    }
+  }
 }
 
