@@ -88,7 +88,7 @@
                   <button @click="deleteItem(item.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2">
                     <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <line x1="4" y1="7" x2="20" y2="7" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" />  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                   </button>
-                  <button @click="goToPageById('TextPagesEdit',item.id)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4">
+                  <button @click="goToPageById('ArticlesEdit',article.id)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4">
                     <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>
                   </button>
                 </div>
@@ -108,7 +108,7 @@
   import HeadTitle from "@/components/HeadTitle.vue";
   import CreateButton from "@/components/CreateButton.vue";
   import Pagination from "@/components/PageNavigationBar.vue";
-  import VueDatePicker from "@vuepic/vue-datepicker";
+  import VueDatePicker from "@vuepic/vue-datepicker";  
   import "@vuepic/vue-datepicker/dist/main.css";
   import store from "@/store";
   import ApiService from '@/services/api-service.js';
@@ -160,6 +160,27 @@
 
   function goToPageById(url, id) {
     router.push({ name: url, params: { id: id } });
+  }
+
+  async function deleteItem(id) {
+
+    try {
+
+      var req = `Delete?type=text_pages&id=${id}`;
+
+      await apiService.sendData(req, null, 'post')
+        .then(response => {
+          console.log("saveItem response=", response);
+        })
+        .catch(error => {
+          console.log("saveItem, sendData error=", error);
+        });
+
+      filteredArticles.value = filteredArticles.value.filter(item => item.id !== id);
+
+    } catch (error) {
+      console.log("saveItem, sendData error = ", error);
+    }
   }
 
 </script>

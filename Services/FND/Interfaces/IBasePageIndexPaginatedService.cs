@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface IBasePageExtService<T> : IBasePageService<T>
+    public interface IBasePageIndexPaginatedService<T> : IBasePageService<T>
     {
         PaginatedResult<T> IndexPaginated(string table, string fields, int page_num, int page_size, string whereCond, string orderBy);
 

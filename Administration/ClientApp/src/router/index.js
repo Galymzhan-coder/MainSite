@@ -9,6 +9,8 @@ import  textPagesEdit  from '../views/TextPages/TextPagesEdit';
 import Blog from "@/views/Blog/Blog.vue";
 
 
+import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
+
 const routes = [
   {
     path: "/",
@@ -38,6 +40,11 @@ const routes = [
               import("@/views/CategoryAndContent/CreateForm.vue"),
           },
         ],
+      },
+      {
+        name: 'ArticlesEdit',
+        path: '/ArticlesEdit/:id',
+        component: articlesEdit,
       },
       {
         name: 'Category',

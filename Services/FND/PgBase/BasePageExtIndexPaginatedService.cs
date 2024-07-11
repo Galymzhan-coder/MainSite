@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Services.FND.PgBase
 {
-    public abstract class BasePageExtService<T>: BasePageService<T>, IBasePageExtService<T> where T : IDto, new ()
+    public abstract class BasePageExtIndexPaginatedService<T>: BasePageService<T>, IBasePageIndexPaginatedService<T> where T : IDto, new ()
     {
-        public BasePageExtService(string tableName, IServiceProvider serviceProvider): base(tableName, serviceProvider) 
+        public BasePageExtIndexPaginatedService(string tableName, IServiceProvider serviceProvider): base(tableName, serviceProvider) 
         { 
         
         }

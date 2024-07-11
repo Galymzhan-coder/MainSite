@@ -13,6 +13,12 @@
 
               <input v-model="itemsEdit.title" type="text" />
 
+              <div class="bg-gray-300 p-2 border md:font-bold"><label>Категория</label></div>
+              <Dropdown :items="selectItems"
+                        idField="id"
+                        displayField="name"
+                        v-model="selectedItemId" />
+
               <div class="bg-gray-300 p-2 border md:font-bold"><label>Текст</label></div>
               <!--<textarea v-model="itemsEdit.description" class="p-2 border w-full text-left resize-none" ></textarea>-->
               <!--RichTextEditor/-->
@@ -35,7 +41,7 @@
               <div class="bg-gray-300 p-2 border md:font-bold"><label>ЧПУ</label></div>
               <input v-model="itemsEdit.sefname" type="text" />
 
-              
+
             </div>
 
 
@@ -79,6 +85,7 @@
   import ApiService from '../../services/api-service.js';
   import { reactive } from 'vue'
   import { quillEditor } from 'vue3-quill'
+  import Dropdown from "@/components/DropdownSelector.vue";
 
   const props = defineProps(['item']);
   const emit = defineEmits(['save', 'cancel']);
@@ -93,6 +100,16 @@
   let content = "";
   let quillInstance = ref(null);
 
+  const selectItems = ref([]);
+
+  const fetchItems = async () => {
+      try {
+        const response = await apiService.fetchDataByTypeLang('Index', 'category', 1);
+        selectItems.value = response.data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
   async function saveItem() {
 
@@ -102,11 +119,11 @@
       const postData = { ...itemsEdit.value };
       console.log("saveItem postData=", postData);
 
-      var req = `Update?type=contents&id=${id}`;
+      var req = `Update?type=text_pages&id=${id}`;
 
       if (Number(id) == 0)
       {
-        req = `Create?type=contents`;
+        req = `Create?type=text_pages`;
       }
 
       await apiService.sendData(req, postData, 'post')
@@ -125,12 +142,12 @@
     }
 
     emit('save', formData.value);
-    goToPage('/TextPages');
+    goToPage('/Articles');
   }
 
   function cancel() {
     emit('cancel');
-    goToPage('/TextPages');
+    goToPage('/Articles');
   }
   onMounted(async () => {
 
@@ -139,9 +156,11 @@
     //if (Number(id) == 0)
     //  return;
 
-    const editData = await apiService.fetchDataByTypeId('GetItem', 'contents', id);
+    const editData = await apiService.fetchDataByTypeId('GetItem', 'text_pages', id);
     itemsEdit.value = editData;
-    console.log('TextPagesEdit, itemsEdit.value=', itemsEdit.value, ", id=", id);
+    console.log('ArticlesEdit, itemsEdit.value=', itemsEdit.value, ", id=", id);
+
+    selectItems.value = await apiService.fetchDataByTypeLang('Index', 'category', 1);
 
     content = itemsEdit.value.text;
     state._content = itemsEdit.value.text;

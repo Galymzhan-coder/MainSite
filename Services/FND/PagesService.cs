@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND
 {
-    public class PagesService: BasePageExtService<PagesDTO>, IPagesService
+    public class PagesService: BasePageExtIndexPaginatedService<PagesDTO>, IPagesService
     {
         public PagesService(IServiceProvider serviceProvider)
         : base("pages", serviceProvider)
