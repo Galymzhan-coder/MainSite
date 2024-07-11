@@ -26,7 +26,7 @@
           </button>
         </div>
         <div class="p-2 border">
-          <input type="checkbox" v-model="item.is_active" @change="() => ChaangeData(item)" />
+          <input type="checkbox" v-model="item.is_active" @change="() => ChangeData(item)" />
         </div>
         <div class="p-2 border">
           <button @click="deleteItem(index)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2">
@@ -43,98 +43,115 @@
                   @save="saveItem"
                   @cancel="cancelForm" />
 
-                  
+
   </div>
-  </template>
-  
-  <script setup>
+</template>
+
+<script setup>
   import { ref, onMounted } from 'vue';
-    import { useRouter } from 'vue-router';
-    import ApiService from '../../services/api-service.js';
+  import { useRouter } from 'vue-router';
+  import ApiService from '../../services/api-service.js';
 
-    const items = ref([]);
-    const apiService = new ApiService();
+  const items = ref([]);
+  const apiService = new ApiService();
 
-    onMounted(async () => {
-      try {
-        //const data = await apiService.fetchData('Index');
-        const data = await apiService.fetchDataByType('Index','category');
-        
-        items.value = data;//data.sort((a,b) => a.id - b.id);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    });
-  
+  onMounted(async () => {
+    try {
+      //const data = await apiService.fetchData('Index');
+      const data = await apiService.fetchDataByTypeLang('Index', 'category', 1); //await apiService.fetchDataByType('Index','category');
+
+      items.value = data;//data.sort((a,b) => a.id - b.id);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  });
+
   function addItem() {
     items.value.push({ id: items.value.length + 1, name: `Item ${items.value.length + 1}`, active: true });
   }
-  
-  function deleteItem(index) {
-    items.value.splice(index, 1);
-  }
-  
+
   function moveUp(index) {
     if (index > 0) {
       [items.value[index - 1], items.value[index]] = [items.value[index], items.value[index - 1]];
     }
   }
-  
+
   function moveDown(index) {
     if (index < items.value.length - 1) {
       [items.value[index], items.value[index + 1]] = [items.value[index + 1], items.value[index]];
     }
   }
-  
+
 
   const selectedItem = ref(null);
-const showForm = ref(false);
-/*
-function editItem(index) {
-  selectedItem.value = { ...items.value[index] };
-  showForm.value = true;
-}
-*/
-function saveItem(updatedItem) {
-  // Сохранение обновленных данных в items
-  const index = items.value.findIndex((item) => item.id === updatedItem.id);
-  if (index !== -1) {
-    items.value.splice(index, 1, updatedItem);
+  const showForm = ref(false);
+  /*
+  function editItem(index) {
+    selectedItem.value = { ...items.value[index] };
+    showForm.value = true;
   }
-  // Закрываем форму после сохранения
-  showForm.value = false;
-}
-
-function cancelForm() {
-  // Закрываем форму при отмене
-  showForm.value = false;
-}
-
-const router = useRouter();
-/*
-function goToPage(url) {
-  router.push(url);
-}
-*/
-function goToPageById(url,id) {
-  //router.push(`${url}/${id}`);
-  //console.log('goToPageById id=', id);
-  router.push({ name: url, params: { id: id } });
-}
-
-    async  function ChaangeData(item) {
-      try {
-        console.log("ChaangeData, item = ", item);
-        await apiService.sendData(`Update?type=category&id=${item.id}`, item, 'post')
-      } catch (e) {
-        console.log("ChaangeData, sendData error = ", e);
-      }
-
+  */
+  function saveItem(updatedItem) {
+    // Сохранение обновленных данных в items
+    const index = items.value.findIndex((item) => item.id === updatedItem.id);
+    if (index !== -1) {
+      items.value.splice(index, 1, updatedItem);
     }
-  </script>
+    // Закрываем форму после сохранения
+    showForm.value = false;
+  }
+
+  function cancelForm() {
+    // Закрываем форму при отмене
+    showForm.value = false;
+  }
+
+  const router = useRouter();
+  /*
+  function goToPage(url) {
+    router.push(url);
+  }
+  */
+  function goToPageById(url, id) {
+    //router.push(`${url}/${id}`);
+    //console.log('goToPageById id=', id);
+    router.push({ name: url, params: { id: id } });
+  }
+
+  async function ChangeData(item) {
+    try {
+      console.log("ChaangeData, item = ", item);
+      await apiService.sendData(`Update?type=category&id=${item.id}`, item, 'post')
+    } catch (e) {
+      console.log("ChaangeData, sendData error = ", e);
+    }
+
+  }
+
+  async function deleteItem(id) {
+
+    try {
+
+      var req = `Delete?type=contents&id=${id}`;
+
+      await apiService.sendData(req, null, 'post')
+        .then(response => {
+          console.log("saveItem response=", response);
+        })
+        .catch(error => {
+          console.log("saveItem, sendData error=", error);
+        });
+
+      items.value = items.value.filter(item => item.id !== id);
+
+    } catch (error) {
+      console.log("saveItem, sendData error = ", error);
+    }
+  }
+</script>
 
 <style>
-.col-width {
-  grid-template-columns: 40px 1fr 1fr 1fr 1fr; /* Пример пропорциональных ширин */
-}
+  .col-width {
+    grid-template-columns: 40px 1fr 1fr 1fr 1fr; /* Пример пропорциональных ширин */
+  }
 </style>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface ICategoriesService : IDBIerarchyService<CategoryDTO>, IBaseService<CategoryDTO>
+    public interface ICategoriesService : IBasePageService<CategoryDTO>//IDBIerarchyService<CategoryDTO>, IBaseService<CategoryDTO>
     {
         
     }
