@@ -1,4 +1,4 @@
-button {
+.btn-login {
   outline: none;
   height: 40px;
   text-align: center;
@@ -18,16 +18,16 @@ button {
   margin-top: 10px;
 }
 
-  button:hover {
+.btn-login:hover {
     color: white;
     background: #03a9f4;
   }
 
-  button:active {
+  .btn-login:active {
     letter-spacing: 2px;
   }
 
-  button:after {
+  .btn-login:after {
     content: "";
   }
 

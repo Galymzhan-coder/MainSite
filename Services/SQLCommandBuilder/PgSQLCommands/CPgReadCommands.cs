@@ -57,7 +57,7 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
             string order = string.IsNullOrEmpty(orderBy) ? "" : $" order by {orderBy}";
 
             var sql = @$" with sorted_tab as (select row_number() over(order by(select 1)) as row_num, {fields} from {tables} {where} {order})
-                          select * from sorted_tab where row_num > {(page_num-1)* page_size} and row_num <= {page_num*page_size} order by row_num";
+                          select * from sorted_tab where row_num > {(page_num-1)* page_size} and row_num <= {page_num*page_size}";
             
             return sql;
         }

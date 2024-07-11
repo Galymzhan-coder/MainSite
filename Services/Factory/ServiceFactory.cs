@@ -19,6 +19,7 @@ namespace Services.Factory
             { "text_pages", ("pages", typeof(IPagesService), typeof(PagesDTO), "Статьи") },
             { "contents",   ("content", typeof(IContentService), typeof(ContentDTO), "Текстовые страницы") },
             { "language",   ("languages", typeof(ILanguagesService), typeof(LanguagesDTO), "Язык") },
+            { "blog",       ("blogs", typeof(IBlogsService), typeof(BlogsDTO), "Записи блога") },
         };
 
         public ServiceFactory(IServiceProvider serviceProvider)

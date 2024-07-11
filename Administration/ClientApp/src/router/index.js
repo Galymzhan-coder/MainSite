@@ -1,4 +1,4 @@
-import store from "@/store";
+//import store from "@/store";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import category from '../views/category/Category';
@@ -6,6 +6,8 @@ import categoryEdit from '../views/category/CategoryEdit';
 
 import  textPages  from '../views/TextPages/TextPages';
 import  textPagesEdit  from '../views/TextPages/TextPagesEdit';
+import Blog from "@/views/Blog/Blog.vue";
+
 
 const routes = [
   {
@@ -57,7 +59,11 @@ const routes = [
         path: '/TextPagesEdit/:id',
         component: textPagesEdit,
       },
-      
+      {
+        name: 'blog',
+        path: '/blog',
+        component: Blog,
+      },
     ],
   },
 ];
@@ -72,7 +78,7 @@ const router = createRouter({
 });
 
 /* Проверка верификация */
-
+/*
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((route) => route.meta.requiresAuth)) {
     if (store.state.authStore.token) {
@@ -83,6 +89,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next();
   }
-});
+});*/
 
 export default router;

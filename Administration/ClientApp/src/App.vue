@@ -4,9 +4,7 @@
   </transition>
 </template>
 
-<style lang="scss">
-// Import Main styles for this application
-@import "styles/style";
+<style>
 .page-enter-active,
 .page-leave-active {
     transition: 0.5s;

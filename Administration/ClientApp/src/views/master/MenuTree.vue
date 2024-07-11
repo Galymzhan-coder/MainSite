@@ -1,8 +1,9 @@
 <template>
   <ul class="bg-gray-800 cursor-pointer">
-    <li v-for="menuItem in menuItems" :key="menuItem.id">
+    <li v-for="menuItem in menuItems" :key="menuItem.id" :class="{'bg-gray-900 text-white relative': menuItem === activeMenuItem}">
       <div @click="toggleChildren(menuItem)" v-if="!menuItem.children">
         <router-link :to="menuItem.path" :class="menuItem.routerClass" @click="toggleChildren(menuItem)">
+          <div class="w-2 h-2 bg-white rounded-full absolute left-1" v-if="menuItem === activeMenuItem"></div>
           <div v-html="menuItem.svg"></div>
           <div style="width: 150px; text-align: left;" class="ml-1">{{ menuItem.label }}</div>
         </router-link>
@@ -51,10 +52,69 @@
       return {
         showChildren: false,
         lastMenuChildren: null,
+        activeMenuItem: null,
       };
     },
+    computed: {
+      activePath() {
+        return this.$route.path;
+      }
+    },
+    watch: {
+      activePath() {
+        this.setActiveMenuItem();
+      }
+    },
+    mounted() {
+      this.setActiveMenuItem();
+    },
     methods: {
+      setActiveMenuItem() {
+        const findActiveMenuItem = (items, parent = null) => {
+          for (const item of items) {
+            if (item.path === this.activePath) {
+              this.activeMenuItem = item;
+              this.openParentItems(parent);
+              break;
+            } else if (item.children) {
+              findActiveMenuItem(item.children, item);
+            }
+          }
+        };
+        findActiveMenuItem(this.menuItems);
+      },
+      openParentItems(item) {
+        if (item) {
+          item.showChildren = true;
+          if (item.parent) {
+            this.openParentItems(item.parent);
+          }
+        }
+      },
       toggleChildren(menuItem) {
+        // Закрываем все открытые элементы
+        const closeAllOpenItems = (items) => {
+          items.forEach(item => {
+            if (item !== menuItem && item.showChildren) {
+              item.showChildren = false;
+            }
+            if (item.children) {
+              closeAllOpenItems(item.children);
+            }
+          });
+        };
+        closeAllOpenItems(this.menuItems);
+
+        // Переключаем текущее состояние элемента
+        if (menuItem.children) {
+          menuItem.showChildren = !menuItem.showChildren;
+          // Обновляем ссылку на последний открытый элемент
+          this.lastMenuChildren = menuItem.showChildren ? menuItem : null;
+        }
+        this.activeMenuItem = menuItem;
+      },
+
+      /*toggleChildren(menuItem) {
         if (this.lastMenuChildren && this.lastMenuChildren !== menuItem) {
           this.lastMenuChildren.showChildren = false;
         }
@@ -64,7 +124,9 @@
           // Обновляем ссылку на последний открытый элемент
           this.lastMenuChildren = menuItem.showChildren ? menuItem : null;
         }
-      },
+        this.activeMenuItem = menuItem;
+
+      },*/
       beforeEnter(el) {
         el.style.maxHeight = '0';
       },
@@ -87,8 +149,6 @@
 </script>
 
 <style scoped>
-@import '../../assets/css/app.css';
-
 li {
   margin: 0;
 }
@@ -98,7 +158,9 @@ li {
 .slide-fade-enter-active, .slide-fade-leave-active {
   overflow: hidden;
 }
-.menu-lists {
-  border-left: 4px solid blue;
+.active-menu-item {
+  background-color: #4A5568; /* Меняем цвет фона активного элемента */
+  color: white; /* Меняем цвет текста активного элемента */
 }
+
 </style>

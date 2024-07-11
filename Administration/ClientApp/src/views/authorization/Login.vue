@@ -36,6 +36,7 @@
       <div class="buttons">
         <button
           id="button"
+          class="btn-login"
           :class="{
             onclic: authStore.isClicked,
             validate: authStore.isValidated,
@@ -64,7 +65,7 @@ const loginHandler = async (username, password) => {
   }
 };
 </script>
-<style scoped>
+<style >
 @import "../../styles/authorization/login.css";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 @import "../../styles/authorization/animate-button.css";

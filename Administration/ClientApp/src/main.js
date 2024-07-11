@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import { Form, Field, ErrorMessage, configure } from "vee-validate";
 import store from "@/store";
+import '@/styles/app.css';
 
 configure({
   validateOnInput: true,

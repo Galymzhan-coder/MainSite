@@ -285,9 +285,9 @@ export default {
             {
               id: 8,
               label: "Blog entries",
+              path: "/blog",
               routerClass:
                 "inline-flex relative items-center py-[10px] px-[20px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800 transition duration-400 ease-in-out",
-              path: "/category",
               svg: `<svg class="h-5 w-5 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z"/>
                       <rect x="4" y="4" width="6" height="6" rx="1" />
@@ -763,8 +763,6 @@ export default {
 </script>
 
 <style scoped>
-@import "../../assets/css/app.css";
-
 .page-enter-active,
 .page-leave-active {
   transition: 0.5s;
