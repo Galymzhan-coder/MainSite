@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND
 {
-    public class BlogsService : BasePageExtService<BlogsDTO>, IBlogsService
+    public class BlogsService : BasePageExtIndexPaginatedService<BlogsDTO>, IBlogsService
     {
         public BlogsService(IServiceProvider serviceProvider)
        : base("blogs", serviceProvider)

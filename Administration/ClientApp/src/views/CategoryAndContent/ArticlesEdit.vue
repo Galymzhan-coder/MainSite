@@ -1,6 +1,5 @@
 <template>
-  <!--<div class="modal">
-    <div class="modal-content p-4 border">-->
+ 
   <div class="p-4 border">
     <h2 class="md:font-bold">Редактировать запись</h2>
     <div class="flex flex-col">
@@ -16,16 +15,13 @@
               <div class="bg-gray-300 p-2 border md:font-bold"><label>Категория</label></div>
               <Dropdown :items="selectItems"
                         idField="id"
-                        displayField="name"
-                        v-model="selectedItemId" />
+                        displayField="title"
+                        v-model="itemsEdit.category_id" />
 
               <div class="bg-gray-300 p-2 border md:font-bold"><label>Текст</label></div>
-              <!--<textarea v-model="itemsEdit.description" class="p-2 border w-full text-left resize-none" ></textarea>-->
-              <!--RichTextEditor/-->
-
+ 
 
               <div class="p-2">
-                <!--TextEditor :tools="['code', 'link']" class="p-2 border w-full text-left resize-none" v-model="itemsEdit.description" />-->
 
                 <quill-editor v-model="content"
                               class="quill-editor"
@@ -41,9 +37,7 @@
               <div class="bg-gray-300 p-2 border md:font-bold"><label>ЧПУ</label></div>
               <input v-model="itemsEdit.sefname" type="text" />
 
-
             </div>
-
 
             <div class="flex flex-col w-1/3 mx-2 mx-2 ">
               <div class="p-2 border w-full text-left mx-2 mx-2 inline-flex items-center md:font-bold w-full">
@@ -83,8 +77,8 @@
   import { ref, defineProps, defineEmits, onMounted, watch } from 'vue';
   import { useRouter, useRoute, } from 'vue-router';
   import ApiService from '../../services/api-service.js';
-  import { reactive } from 'vue'
-  import { quillEditor } from 'vue3-quill'
+  import { reactive } from 'vue';
+  import { quillEditor } from 'vue3-quill';
   import Dropdown from "@/components/DropdownSelector.vue";
 
   const props = defineProps(['item']);
@@ -101,7 +95,7 @@
   let quillInstance = ref(null);
 
   const selectItems = ref([]);
-
+  /*
   const fetchItems = async () => {
       try {
         const response = await apiService.fetchDataByTypeLang('Index', 'category', 1);
@@ -110,7 +104,7 @@
         console.error('Error fetching data:', error);
       }
     };
-
+    */
   async function saveItem() {
 
     try {
@@ -155,12 +149,14 @@
 
     //if (Number(id) == 0)
     //  return;
-
+    //fetchItems();
     const editData = await apiService.fetchDataByTypeId('GetItem', 'text_pages', id);
     itemsEdit.value = editData;
     console.log('ArticlesEdit, itemsEdit.value=', itemsEdit.value, ", id=", id);
 
     selectItems.value = await apiService.fetchDataByTypeLang('Index', 'category', 1);
+
+    console.log('Articles, selectItems.value=', selectItems.value);
 
     content = itemsEdit.value.text;
     state._content = itemsEdit.value.text;
@@ -176,7 +172,7 @@
     formData.append('file', file);
 
     try {
-      const response = await apiService.sendFile('upload-image', formData);//await axios.post('/api/upload-image', formData);
+      const response = await apiService.sendFile('upload-image', formData);
       console.log('uploadImage response = ', response);
       return response;
     } catch (error) {
@@ -213,9 +209,7 @@
             image: () => {
               const input = document.createElement('input');
               input.setAttribute('type', 'file');
-              //input.setAttribute('accept', 'image/*');
               input.click();
-              //console.log('input = ', input);
 
               input.onchange = async () => {
                 const file = input.files[0];

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label for="dropdown">Выберите значение:</label>
+    <!--label for="dropdown">Выберите значение:</!--label><br /-->
     <select id="dropdown" :value="modelValue" @change="onSelectChange">
       <option v-for="item in items" :key="item[idField]" :value="item[idField]">
         {{ item[displayField] }}
