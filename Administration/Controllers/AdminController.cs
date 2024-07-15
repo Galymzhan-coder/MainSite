@@ -24,6 +24,20 @@ namespace Administration.Controllers
             _logService = logService;
         }
 
+        [HttpGet("GetRequestTypes"), ApiVersion("1")]
+        public ActionResult GetRequestTypes() 
+        { 
+            try
+            {
+                return Ok(_serviceFactory.GetServiceTypes());
+            }catch (Exception ex)
+            {
+                _logService.LogError($"AdminController.GetRequestTypes() :{ex.Message}");
+
+                return StatusCode(500, $"Internal Server Error! - {ex.Message}");
+            }
+        }
+
         [HttpGet("Index"), ApiVersion("1")]
         public IActionResult Index(string type, int lang_id=1)
         {
@@ -36,6 +50,31 @@ namespace Administration.Controllers
 
                 
                 var lst = service.Index(lang_id);
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.Index() :{ex.Message}");
+
+                return StatusCode(500, "Internal Server Error!");
+            }
+
+
+
+        }
+
+        [HttpGet("IndexPaginated"), ApiVersion("1")]
+        public IActionResult Index(string type, int page_num = 1,int page_size = 20, int lang_id = 1, string filter = "")
+        {
+            try
+            {
+                var service = _serviceFactory.GetService(type);
+
+                if (service == null)
+                    return NotFound($"Service for type '{type}' not found.");
+
+
+                var lst = service.IndexPaginated(page_num, page_size, lang_id, filter);
                 return Ok(lst);
             }
             catch (Exception ex)

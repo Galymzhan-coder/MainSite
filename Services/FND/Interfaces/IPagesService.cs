@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface IPagesService : IBaseService<PagesDTO>
+    public interface IPagesService : IBasePageIndexPaginatedService<PagesDTO>
     {
     }
 }

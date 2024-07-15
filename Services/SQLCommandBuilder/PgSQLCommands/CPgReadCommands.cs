@@ -1,4 +1,5 @@
 ﻿using Models.DTO.Interfaces;
+using Mysqlx.Crud;
 using Services.SQLCommandBuilder.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,19 +32,33 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
             return sql;
         }
 
-        public string BuildSelectCMD(string tables, string fields, string whereConditions = "")
+        public string BuildSelectCMD(string table, string fields, string whereConditions = "")
         {
             if (string.IsNullOrWhiteSpace(fields))
                 return "Error: param \" fields\" is empty!";
 
 
-            var sql = $"SELECT {fields} FROM {tables}";
+            var sql = $"SELECT {fields} FROM {table}";
 
             if (!string.IsNullOrEmpty(whereConditions))
             {
                 sql += $" WHERE {whereConditions}";
             }
 
+            return sql;
+        }
+
+        public string BuildSelectPaginatedCMD(string tables, string fields, int page_num, int page_size, string whereConditions = "", string orderBy = "")
+        {
+            if (string.IsNullOrWhiteSpace(fields))
+                return "Error: param \" fields\" is empty!";
+
+            string where = string.IsNullOrEmpty(whereConditions) ? "" : $" where {whereConditions}";
+            string order = string.IsNullOrEmpty(orderBy) ? "" : $" order by {orderBy}";
+
+            var sql = @$" with sorted_tab as (select row_number() over(order by(select 1)) as row_num, {fields} from {tables} {where} {order})
+                          select * from sorted_tab where row_num > {(page_num-1)* page_size} and row_num <= {page_num*page_size}";
+            
             return sql;
         }
     }

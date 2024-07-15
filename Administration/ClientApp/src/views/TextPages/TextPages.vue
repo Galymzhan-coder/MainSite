@@ -42,7 +42,7 @@
 
 <script setup>
   import { ref, onMounted } from 'vue';
-  import textPagesEdit from './TextPagesEdit.vue';
+  import './TextPagesEdit.vue';
 
   //import { useRouter } from 'vue-router';
   import ApiService from '../../services/api-service.js';
@@ -112,6 +112,8 @@
         .catch(error => {
           console.log("saveItem, sendData error=", error);
         });
+
+      items.value = items.value.filter(item => item.id !== id);
 
     } catch (error) {
       console.log("saveItem, sendData error = ", error);

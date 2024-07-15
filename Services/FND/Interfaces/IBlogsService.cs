@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.FND.Interfaces
 {
-    public interface IContentService: IBasePageService<ContentDTO>
+    public interface IBlogsService : IBasePageIndexPaginatedService<BlogsDTO>
     {
     }
 }
