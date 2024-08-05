@@ -4,11 +4,12 @@ using Services.FND.Interfaces;
 using Services.Utils;
 using Models.DTO.Interfaces;
 using Services.FND.PgBase;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Services.FND
 {
     //public class CategoriesService:ICategoriesService, DBService<CategoryDTO>//IBaseService<IDto>
-    public class CategoriesService : BasePageService<CategoryDTO>, ICategoriesService //DBService<CategoryDTO>, ICategoriesService//, IBaseService<IDto>
+    public class CategoriesService : BasePageExtIndexHierarchyService<CategoryDTO>, ICategoriesService //DBService<CategoryDTO>, ICategoriesService//, IBaseService<IDto>
     {
         //private ODDANP _odp;
         //private string error ;
@@ -17,6 +18,17 @@ namespace Services.FND
         public CategoriesService(IServiceProvider serviceProvider)
         : base("categories", serviceProvider)
         {
+        }
+
+        public override IEnumerable<CategoryDTO> IndexHierarchySorted(string indent_symbol, string indent_pre_symbol, int lang_id)
+        {
+            var lst = IndexHierarchySorted("categories",
+                        $@"t.id, t.parent_id, COALESCE((select ct.title from categories_translations ct where t.id = ct.category_id and ct.lang_id={lang_id}), t.title) AS title, 
+                              t.sefname, COALESCE((select ct.description from categories_translations ct where t.id = ct.category_id and ct.lang_id={lang_id}), t.description) AS description, 
+                              t.is_active, t.create_date, t.update_date, t.root, t.lft, t.rgt",
+                        "parent_id", "id", "title", indent_symbol, indent_pre_symbol, "");
+
+            return lst;
         }
         /*
         public IEnumerable<IDto> Index(string tabName,string whereCond) 
@@ -43,7 +55,20 @@ namespace Services.FND
             try
             {
                 //id, parent_id, title, sefname, description, is_active, create_date, update_date, root, lft, rgt,level
-                var lst = Index("categories c , categories_translations ct", "c.id, c.parent_id, COALESCE(ct.title , c.title) title, sefname, COALESCE(ct.description , c.description) description, is_active, create_date, update_date, root, lft, rgt,level", $"c.id =ct.category_id and ct.lang_id={lang_id}");
+                //var lst = Index("categories c , categories_translations ct", "c.id, c.parent_id, COALESCE(ct.title , c.title) title, sefname, COALESCE(ct.description , c.description) description, is_active, create_date, update_date, root, lft, rgt,level", $"c.id =ct.category_id and ct.lang_id={lang_id}");
+
+                /*var sql = _cmd_select.BuildSelectHierarchySortedCMD($"categories", 
+                           $@"t.id, t.parent_id, COALESCE((select ct.title from categories_translations ct where t.id = ct.category_id and ct.lang_id={lang_id}), t.title) AS title, 
+                              t.sefname, COALESCE((select ct.description from categories_translations ct where t.id = ct.category_id and ct.lang_id={lang_id}), t.description) AS description, 
+                              t.is_active, t.create_date, t.update_date, t.root, t.lft, t.rgt", "parent_id", "id", "");
+                
+                var lst = _odp.Routine.GetFromDatabase<CategoryDTO>(ref error, sql);
+
+                if (!string.IsNullOrWhiteSpace(error))
+                    throw new Exception(error);
+                */
+
+                var lst = IndexHierarchySorted("&nbsp;&nbsp;","", lang_id);
                 return lst;
             }
             catch

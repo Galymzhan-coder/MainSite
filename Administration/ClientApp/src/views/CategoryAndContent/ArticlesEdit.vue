@@ -15,7 +15,7 @@
               <div class="bg-gray-300 p-2 border md:font-bold"><label>Категория</label></div>
               <Dropdown :items="selectItems"
                         idField="id"
-                        displayField="title"
+                        displayField="indented_title"
                         v-model="itemsEdit.category_id" />
 
               <div class="bg-gray-300 p-2 border md:font-bold"><label>Текст</label></div>
@@ -154,7 +154,8 @@
     itemsEdit.value = editData;
     console.log('ArticlesEdit, itemsEdit.value=', itemsEdit.value, ", id=", id);
 
-    selectItems.value = await apiService.fetchDataByTypeLang('Index', 'category', 1);
+    //selectItems.value = await apiService.fetchDataByTypeLang('Index', 'category', 1);
+    selectItems.value = await apiService.fetchDataHierarchyByTypeLang('IndexHierarchySorted', 'category','------','|', 1);
 
     console.log('Articles, selectItems.value=', selectItems.value);
 

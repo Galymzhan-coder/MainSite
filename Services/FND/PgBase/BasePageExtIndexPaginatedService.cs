@@ -16,7 +16,7 @@ namespace Services.FND.PgBase
         
         }
 
-        public abstract PaginatedResult<T> IndexPaginated(int page_num, int page_size, int lang_id);
+        public abstract PaginatedResult<T> IndexPaginated(int page_num, int page_size, int lang_id, string whereCond="");
 
         public PaginatedResult<T> IndexPaginated(string table, string fields, int page_num, int page_size, string whereCond, string orderBy)
         {
@@ -40,5 +40,7 @@ namespace Services.FND.PgBase
                 TotalPages = Convert.ToInt32(cnt)
             };
         }
+
+        public abstract string BuildFilterConditions(string filter);
     }
 }

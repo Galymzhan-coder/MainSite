@@ -29,6 +29,9 @@ public partial class CategoryDTO:IDto
 
     public uint? Level { get; set; }
 
+    public string? indented_title { get; set; }
+    
+
     public void SetDefaultValues()
     {
         Id = 0;
@@ -54,6 +57,8 @@ public partial class CategoryDTO:IDto
         Rgt = 0;
 
         Level = 0;
+
+        indented_title = string.Empty;
     }
 
 }

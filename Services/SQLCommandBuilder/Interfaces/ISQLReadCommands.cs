@@ -14,6 +14,8 @@ namespace Services.SQLCommandBuilder.Interfaces
 
         string BuildSelectCMD(string tables, string fields, string whereConditions = "");
 
+        public string BuildSelectHierarchySortedCMD(string table, string fields, string parent_id_col, string id_col, string indented_field, string indent_symbol, string indent_pre_symbol, string whereConditions = "");
+
         string BuildSelectPaginatedCMD(string tables, string fields, int page_num, int page_size, string whereConditions = "", string orderBy = "");
 
     }

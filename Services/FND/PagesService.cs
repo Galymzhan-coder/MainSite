@@ -3,6 +3,7 @@ using Models.DTO.Interfaces;
 using Models.DTO.ResultDTOs;
 using Models.Entities;
 using Models.FFIFND;
+using Newtonsoft.Json.Linq;
 using Services.FND.Interfaces;
 using Services.FND.PgBase;
 using System;
@@ -123,7 +124,7 @@ namespace Services.FND
 
         }
         //PaginatedResult<T> IndexPaginated(string table, string fields, int page_num, int page_size, string whereCond)
-        public override PaginatedResult<PagesDTO> IndexPaginated(int pageNumber, int pageSize, int lang_id)
+        public override PaginatedResult<PagesDTO> IndexPaginated(int pageNumber, int pageSize, int lang_id, string whereCond = "")
         {
 
             try
@@ -132,14 +133,77 @@ namespace Services.FND
                 var lst = Index("pages p, pages_translations pt", @"p.id, p.user_id, p.category_id, pt.title, pt.short_text, pt.text, p.sefname, p.image, p.publish_date, p.views,p.is_active, p.create_date, 
                                 p.update_date, pt.meta_description, pt.meta_keywords, p.meta_image, pt.meta_title, p.is_mainpage, p.download_file", $"p.id = pt.page_id and pt.lang_id={lang_id}");
                 */
+
+                /*
                 var ret = IndexPaginated("pages p, pages_translations pt, categories c, categories_translations ct", @"p.id, p.user_id, p.category_id, pt.title, pt.short_text, pt.text, p.sefname, p.image, p.publish_date, p.views,p.is_active, p.create_date, 
-                                p.update_date, pt.meta_description, pt.meta_keywords, p.meta_image, pt.meta_title, p.is_mainpage, p.download_file, COALESCE(ct.title , c.title) category", pageNumber, pageSize, $"p.id=pt.page_id and c.id=ct.category_id and p.category_id = c.id and ct.lang_id = pt.lang_id and pt.lang_id={lang_id}", "p.publish_date desc");
+                                p.update_date, pt.meta_description, pt.meta_keywords, p.meta_image, pt.meta_title, p.is_mainpage, p.download_file, COALESCE(ct.title , c.title) category", pageNumber, pageSize, $"p.id=pt.page_id and c.id=ct.category_id and p.category_id = c.id and ct.lang_id = pt.lang_id and pt.lang_id={lang_id} { (string.IsNullOrEmpty(whereCond) ? "" : " and "+ whereCond)  }", "p.publish_date desc");
+                */
+
+                string where = $"p.id=pt.page_id and c.id=ct.category_id and p.category_id = c.id and ct.lang_id = pt.lang_id and pt.lang_id={lang_id}";
+
+                if (!string.IsNullOrEmpty(whereCond))
+                {
+                    var filterConditions = BuildFilterConditions(whereCond);
+                    if (!string.IsNullOrEmpty(filterConditions))
+                    {
+                        where += " and " + filterConditions;
+                    }
+                }
+
+                var ret = IndexPaginated(
+                    "pages p, pages_translations pt, categories c, categories_translations ct",
+                    @"p.id, p.user_id, p.category_id, pt.title, pt.short_text, pt.text, p.sefname, p.image, p.publish_date, p.views,p.is_active, p.create_date, 
+                    p.update_date, pt.meta_description, pt.meta_keywords, p.meta_image, pt.meta_title, p.is_mainpage, p.download_file, COALESCE(ct.title , c.title) category",
+                    pageNumber,
+                    pageSize,
+                    where,
+                    "p.publish_date desc"
+                );
 
                 return ret;
+
             }
             catch
             {
                 throw;
+            }
+        }
+
+        public override string BuildFilterConditions(string filter)
+        {
+            try
+            {
+                var filterConditions = new List<string>();
+                var filters = JObject.Parse(filter);
+
+                foreach (var property in filters.Properties())
+                {
+                    var value = property.Value.ToString();
+
+                    if (string.IsNullOrWhiteSpace(value))
+                        continue;
+
+                    switch (property.Name.ToLower())
+                    {
+                        case "searchbyname":
+                            filterConditions.Add($"pt.title LIKE '%{value}%'");
+                            break;
+                        case "searchbypublishdate":
+                            filterConditions.Add($"p.publish_date::date = '{value}'");
+                            break;
+                        case "searchbycategory":
+                            filterConditions.Add($"c.id = {value}");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                return string.Join(" and ", filterConditions);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при обработке фильтров: " + ex.Message);
             }
         }
     }
