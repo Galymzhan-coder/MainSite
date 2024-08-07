@@ -10,6 +10,7 @@ import Blog from "@/views/Blog/Blog.vue";
 
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
+import BlogEdit from "@/views/Blog/BlogEdit.vue";
 
 const routes = [
   {
@@ -69,7 +70,18 @@ const routes = [
       {
         name: 'blog',
         path: '/blog',
-        component: Blog,
+        children: [
+          {
+            name: 'blog-index',
+            path: 'index',
+            component: Blog
+          },
+          {
+            name: 'blog-update',
+            path: 'update?:id',
+            component: BlogEdit
+          }
+        ]
       },
     ],
   },

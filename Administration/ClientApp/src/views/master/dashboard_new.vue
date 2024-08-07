@@ -274,7 +274,6 @@ export default {
           label: "Blog",
           routerClass:
             "inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium border-gray-200 bg-gray-700 hover:bg-gray-300 hover:text-gray-800 transition duration-400 ease-in-out",
-          path: "/category",
           svg: `<svg class="h-5 w-5 text-white-300"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
                   <polygon points="12 2 2 7 12 12 22 7 12 2" />
                   <polyline points="2 17 12 22 22 17" />
@@ -285,7 +284,7 @@ export default {
             {
               id: 8,
               label: "Blog entries",
-              path: "/blog",
+              path: "/blog/index",
               routerClass:
                 "inline-flex relative items-center py-[10px] px-[20px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800 transition duration-400 ease-in-out",
               svg: `<svg class="h-5 w-5 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

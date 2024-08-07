@@ -28,16 +28,16 @@
         <div class="bg-gray-300 px-3 py-2 border">Активность</div>
         <div class="bg-gray-300 px-3 py-2 border">Действия</div>
       </div>
-      <div v-for="blog in blogs" :key="blog.id" class="grid grid-cols-7 gap-0 grid-cols-custom">
-        <div class="px-3 py-3 border flex-1 break-words">{{ blog.id }}</div>
-        <div class="px-3 py-3 border flex-1 break-words">{{ blog.category }}</div>
-        <div class="px-3 py-3 border flex-1 break-words">{{ blog.title }}</div>
-        <div class="px-3 py-3 border flex-1 break-words">{{ blog.views }}</div>
-        <div class="px-3 py-3 border flex-1 break-words">{{ blog.date }}</div>
+      <div v-for="(blog, index) in filteredBlogs" :key="blog.id" class="grid grid-cols-7 gap-0 grid-cols-custom">
+        <div class="px-3 py-3 border flex-1">{{ (currentPage - 1) * pageSize + index + 1 }}</div>
+        <div class="px-3 py-3 border flex-1 break-words">{{ blog.category_name }}</div>
+        <div class="px-3 py-3 border flex-1 break-words">{{ cleanTitle(blog.title) }}</div>
+        <div class="px-3 py-3 border flex-1">{{ blog.views }}</div>
+        <div class="px-3 py-3 border flex-1 break-words">{{ formatDateBlogs(blog.publish_date) }}</div>
         <div class="px-3 py-3 border flex-1 flex items-center justify-center">
           <button class= "text-white font-bold py-2 px-2 w-[40px] flex items-center justify-center"
-                  :class="{ 'bg-blue-500 hover:bg-blue-600': blog.active, 'bg-gray-400 hover:bg-gray-500': !blog.active}">
-            <svg v-if="blog.active" class="h-5 w-5" fill="#ffffff" height="24" width="24" version="1.1" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+                  :class="{ 'bg-blue-500 hover:bg-blue-600': blog.is_active, 'bg-gray-400 hover:bg-gray-500': !blog.is_active}">
+            <svg v-if="blog.is_active" class="h-5 w-5" fill="#ffffff" height="24" width="24" version="1.1" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
               <g>
               <path d="m494.8,241.4l-50.6-49.4c-50.1-48.9-116.9-75.8-188.2-75.8s-138.1,26.9-188.2,75.8l-50.6,49.4c-11.3,12.3-4.3,25.4 0,29.2l50.6,49.4c50.1,48.9 116.9,75.8 188.2,75.8s138.1-26.9 188.2-75.8l50.6-49.4c4-3.8 11.7-16.4 0-29.2zm-238.8,84.4c-38.5,0-69.8-31.3-69.8-69.8 0-38.5 31.3-69.8 69.8-69.8 38.5,0 69.8,31.3 69.8,69.8 0,38.5-31.3,69.8-69.8,69.8zm-195.3-69.8l35.7-34.8c27-26.4 59.8-45.2 95.7-55.4-28.2,20.1-46.6,53-46.6,90.1 0,37.1 18.4,70.1 46.6,90.1-35.9-10.2-68.7-29-95.7-55.3l-35.7-34.7zm355,34.8c-27,26.3-59.8,45.1-95.7,55.3 28.2-20.1 46.6-53 46.6-90.1 0-37.2-18.4-70.1-46.6-90.1 35.9,10.2 68.7,29 95.7,55.4l35.6,34.8-35.6,34.7z"/>
               </g>
@@ -48,7 +48,7 @@
           </button>
         </div>
         <div class="px-3 py-3 border flex flex-col">
-          <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-2 w-[40px] flex items-center justify-center">
+          <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-2 w-[40px] flex items-center justify-center" @click="blogEdit(blog.id)">
             <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>
           </button>
           <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 w-[40px]  flex items-center justify-center">
@@ -56,29 +56,50 @@
           </button>
         </div>
       </div>
-    </div>                  
+    </div>   
+    <Pagination :currentPage="currentPage" :totalPages="totalPages" @page-changed="fetchBlogs" />
   </div>
 </template>
 
 <script setup>
-const blogs = [ 
-  {
-    id: 1,
-    category: 'Категория 1',
-    title: 'Заголовок 1 вфыввввввввввввввв',
-    views: 100,
-    date: '2022-01-01',
-    active: true,
-  },
-  {
-    id: 2,
-    category: 'Категория 2',
-    title: 'Заголовок 2',
-    views: 200,
-    date: '2022-01-02',
-    active: false,
-  }
-]
+import { ref, onMounted } from 'vue';
+import ApiService from '@/services/api-service.js';
+import Pagination from "@/components/PageNavigationBar";
+import { formatDateBlogs, isNullOrEmpty } from '@/utils/formatters';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+let totalPages = ref(1);
+let currentPage = ref(1);
+const pageSize = 20;
+const filteredBlogs = ref([]);
+const apiService = new ApiService();
+
+const cleanTitle = (title) => {
+    return isNullOrEmpty(title) ? title : title.replace(/&nbsp;/g, ' ');
+  };
+const fetchBlogs = async (page = 1) => {
+  currentPage = page;
+  try {
+      const data = await apiService.fetchPartOfDataByTypeLang('IndexPaginated', 'blog', page, pageSize, 1);
+      filteredBlogs.value = Array.isArray(data.items) ? data.items : []; // Убедитесь, что это массив
+      totalPages = Math.ceil(data.totalPages / pageSize);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      filteredBlogs.value = []; // Убедитесь, что это массив даже при ошибке
+    }
+};
+
+const blogEdit = (id) => {
+  router.push({ name: 'blog-update', params: { id: id } });
+}
+
+
+
+onMounted(() => {
+  fetchBlogs();
+});
 </script>
 
 
