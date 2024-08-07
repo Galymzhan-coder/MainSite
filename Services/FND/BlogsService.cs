@@ -30,7 +30,7 @@ namespace Services.FND
                 throw;
             }
         }
-        public override PaginatedResult<BlogsDTO> IndexPaginated(int pageNumber, int pageSize, int lang_id)
+        public override PaginatedResult<BlogsDTO> IndexPaginated(int pageNumber, int pageSize, int lang_id, string whereCond="")
         {
             try
             {
@@ -128,6 +128,11 @@ namespace Services.FND
                 throw;
             }
 
+        }
+
+        public override string BuildFilterConditions(string filter)
+        {
+            throw new NotImplementedException();
         }
 
     }

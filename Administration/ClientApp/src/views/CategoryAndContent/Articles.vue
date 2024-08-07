@@ -40,52 +40,57 @@
             <div class="table-header text-xs text-gray-700 uppercase bg-gray-100 border-b">
               <div class="table-row border-b flex">
                 <div class="table-cell px-6 py-3 flex-first">#</div>
-                <div class="table-cell px-6 py-3 flex-1">Заголовок</div>
-                <div class="table-cell px-6 py-3 flex-1">Дата публикации</div>
-                <div class="table-cell px-6 py-3 flex-1">Категории</div>
-                <div class="table-cell px-6 py-3 flex-1">ЧПУ</div>
-                <div class="table-cell px-6 py-3 flex-1">Видимость</div>
-                <div class="table-cell px-6 py-3 flex-1">Действия</div>
+                <div class="table-cell px-6 py-3 flex-title">Заголовок</div>
+                <div class="table-cell px-6 py-3 flex-date">Дата публикации</div>
+                <div class="table-cell px-6 py-3 flex-category">Категории</div>
+                <div class="table-cell px-6 py-3 flex-sefname">ЧПУ</div>
+                <div class="table-cell px-6 py-3 flex-active">Видимость</div>
+                <div class="table-cell px-6 py-3 flex-actions">Действия</div>
               </div>
               <div class="table-row flex">
-                <div class="table-cell px-6 py-4 flex-1">&nbsp;</div>
-                <div class="table-cell px-6 py-4 flex-1">
+                <div class="table-cell px-6 py-4 flex-first">&nbsp;</div>
+                <div class="table-cell px-6 py-4 flex-title">
                   <div class="group">
                     <input type="text" class="inputByName" v-model="articleStore.searchByName" placeholder="Search by Title" />
                   </div>
                 </div>
-                <div class="table-cell px-6 py-4 flex-1">
-                  <input type="text" v-model="articleStore.searchByPublishDate" />
+                <div class="table-cell px-6 py-4 flex-date">
+                  <input type="text" v-model="articleStore.searchByPublishDate" placeholder="Search by Date" />
                 </div>
-                <div class="table-cell px-6 py-4 flex-1">
+                <div class="table-cell px-6 py-4 flex-category">
+                  <!--
                   <select class="w-[100px]" v-model="articleStore.searchByCategory">
                     <option></option>
                     <option>2023</option>
                     <option>2021</option>
                     <option>2022</option>
                     <option>2020</option>
-                  </select>
+                  </select>-->
+                  <Dropdown class="w-[100px]" :items="selectCategoryItems"
+                    idField="id"
+                    displayField="indented_title"
+                    v-model="articleStore.searchByCategory" />
                 </div>
-                <div class="table-cell px-6 py-4 flex-1">&nbsp;</div>
-                <div class="table-cell px-6 py-4 flex-1">&nbsp;</div>
-                <div class="table-cell px-6 py-4 flex-1">&nbsp;</div>
+                <div class="table-cell px-6 py-4 flex-sefname">&nbsp;</div>
+                <div class="table-cell px-6 py-4 flex-active">&nbsp;</div>
+                <div class="table-cell px-6 py-4 flex-actions">&nbsp;</div>
               </div>
             </div>
             <div class="table-body">
               <div class="table-row bg-white border-b dark:bg-gray-800 dark:border-gray-700 flex"
-                   v-for="(article, index) in filteredArticles"
+                   v-for="(article, index) in articles"
                    :key="article.id"
                    @mouseover="hover = index"
                    @mouseleave="hover = null"
                    :class="{ 'bg-gray-200': hover === index }">
                 <div class="table-cell px-6 py-4 flex-first">{{ index + (currentPage - 1) * pageSize + 1 }}</div>
-                <div class="table-cell px-6 py-4 flex-1">{{ cleanTitle(article.title) }}</div>
-                <div class="table-cell px-6 py-4 flex-1">{{ formatDate(article.publish_date) }}</div>
-                <div class="table-cell px-6 py-4 flex-1">{{ article.category }}</div>
-                <div class="table-cell px-6 py-4 flex-1">{{ article.sefname }}</div>
-                <div class="table-cell px-6 py-4 flex-1">{{ article.active }}</div>
-                <div class="table-cell px-6 py-4 flex-1">
-                  <button @click="deleteItem(item.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2">
+                <div class="table-cell px-6 py-4 flex-title">{{ cleanTitle(article.indented_title) }}</div>
+                <div class="table-cell px-6 py-4 flex-date">{{ formatDate(article.publish_date) }}</div>
+                <div class="table-cell px-6 py-4 flex-category">{{ article.category }}</div>
+                <div class="table-cell px-6 py-4 flex-sefname">{{ article.sefname }}</div>
+                <div class="table-cell px-6 py-4 flex-active">{{ article.active }}</div>
+                <div class="table-cell px-6 py-4 flex-actions">
+                  <button @click="deleteItem(article.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2">
                     <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <line x1="4" y1="7" x2="20" y2="7" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" />  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
                   </button>
                   <button @click="goToPageById('ArticlesEdit',article.id)" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4">
@@ -102,18 +107,18 @@
   </div>
 </template>
 
-
 <script setup>
-  import { ref, computed, onMounted } from "vue";
+  import { ref, computed, watch, onMounted } from "vue";
   import HeadTitle from "@/components/HeadTitle.vue";
   import CreateButton from "@/components/CreateButton.vue";
   import Pagination from "@/components/PageNavigationBar.vue";
-  import VueDatePicker from "@vuepic/vue-datepicker";  
+  import VueDatePicker from "@vuepic/vue-datepicker";
   import "@vuepic/vue-datepicker/dist/main.css";
   import store from "@/store";
   import ApiService from '@/services/api-service.js';
   import { formatDate, isNullOrEmpty } from '@/utils/formatters';
   import { useRouter } from 'vue-router';
+  import Dropdown from "@/components/DropdownSelector.vue";
 
   const router = useRouter();
   const apiService = new ApiService();
@@ -129,22 +134,73 @@
   let totalPages = ref(1);
   let currentPage = ref(1);
   const pageSize = 20;
-  const filteredArticles = ref([]);
+  const articles = ref([]);
+  const selectCategoryItems = ref([]);
+
+  const filteredArticles = computed(() => {
+    return filterArticles();
+  });
+
+  const paginatedArticles = computed(() => {
+    return getPaginatedArticles();
+  });
+
+  const filterArticles = () => {
+    const searchQuery = articleStore.value.searchByName.toLowerCase();
+    const searchByDate = articleStore.value.searchByPublishDate;
+    const searchByCategory = articleStore.value.searchByCategory;
+
+    return articles.value.filter(article => {
+      const matchesName = article.title && article.title.toLowerCase().includes(searchQuery);
+      const matchesDate = !searchByDate || (article.publish_date && article.publish_date.includes(searchByDate));
+      const matchesCategory = !searchByCategory || article.category.toString() === searchByCategory;
+
+      return matchesName && matchesDate && matchesCategory;
+    });
+  };
+
+  const getPaginatedArticles = () => {
+    const start = (currentPage.value - 1) * pageSize;
+    const end = start + pageSize;
+    return filteredArticles.value.slice(start, end);
+  };
 
   const fetchArticles = async (page = 1) => {
-    currentPage = page;
+    console.log('Articles1 fetchArticles, ', ' page=', page, ', paginatedArticles=', paginatedArticles);
+    currentPage.value = page;
     try {
-      const data = await apiService.fetchPartOfDataByTypeLang('IndexPaginated', 'text_pages', page, pageSize, 1);
-      filteredArticles.value = Array.isArray(data.items) ? data.items : []; // Убедитесь, что это массив
-      totalPages = Math.ceil(data.totalPages / pageSize);
 
-      console.error('Articles fetchArticles, totalPages:', totalPages, ', data=', data, ', page=', page);
+      //selectCategoryItems.value = await apiService.fetchDataByTypeLang('IndexHierarchySorted', 'category', 1);
+      selectCategoryItems.value = await apiService.fetchDataHierarchyByTypeLang('IndexHierarchySorted', 'category', '------', '|', 1);
+      const filter = {
+        searchByName: articleStore.value.searchByName,
+        searchByPublishDate: articleStore.value.searchByPublishDate,
+        searchByCategory: articleStore.value.searchByCategory
+      };
+      const data = await apiService.fetchPartOfDataByTypeLangFiltered('IndexPaginated', 'text_pages', page, pageSize, 1, filter);
+      articles.value = Array.isArray(data.items) ? data.items : []; // Убедитесь, что это массив
+      totalPages.value = Math.ceil(data.totalPages / pageSize);
+
+      console.log('Articles fetchArticles, totalPages:', totalPages.value, ', data=', data, ', page=', page);
 
     } catch (error) {
       console.error('Error fetching data:', error);
-      filteredArticles.value = []; // Убедитесь, что это массив даже при ошибке
+      articles.value = []; // Убедитесь, что это массив даже при ошибке
     }
   };
+
+  watch(
+    () => [
+      articleStore.value.searchByName,
+      articleStore.value.searchByPublishDate,
+      articleStore.value.searchByCategory
+    ],
+    () => {
+      // Фильтруем статьи и обновляем пагинацию при изменении поисковых параметров
+      fetchArticles();
+    },
+    { deep: true }
+  );
 
   onMounted(() => {
     fetchArticles();
@@ -163,32 +219,59 @@
   }
 
   async function deleteItem(id) {
-
     try {
-
       var req = `Delete?type=text_pages&id=${id}`;
 
       await apiService.sendData(req, null, 'post')
         .then(response => {
-          console.log("saveItem response=", response);
+          console.log("deleteItem response=", response);
         })
         .catch(error => {
-          console.log("saveItem, sendData error=", error);
+          console.log("deleteItem, sendData error=", error);
         });
 
-      filteredArticles.value = filteredArticles.value.filter(item => item.id !== id);
+      articles.value = articles.value.filter(item => item.id !== id);
 
     } catch (error) {
-      console.log("saveItem, sendData error = ", error);
+      console.log("deleteItem, sendData error = ", error);
     }
   }
-
 </script>
 
 <style scoped>
   .flex-first {
-    width: 10px; /* Задайте необходимую ширину */
-    flex: 0 0 10px; /* Это фиксирует ширину в Flexbox */
+    width: 50px; /* Задайте необходимую ширину */
+    flex: 0 0 50px; /* Это фиксирует ширину в Flexbox */
+  }
+
+  .flex-title {
+    width: 250px; /* Задайте необходимую ширину */
+    flex: 0 0 250px; /* Это фиксирует ширину в Flexbox */
+  }
+
+  .flex-date {
+    width: 150px; /* Задайте необходимую ширину */
+    flex: 0 0 150px; /* Это фиксирует ширину в Flexbox */
+  }
+
+  .flex-category {
+    width: 200px; /* Задайте необходимую ширину */
+    flex: 0 0 200px; /* Это фиксирует ширину в Flexbox */
+  }
+
+  .flex-sefname {
+    width: 150px; /* Задайте необходимую ширину */
+    flex: 0 0 150px; /* Это фиксирует ширину в Flexbox */
+  }
+
+  .flex-active {
+    width: 100px; /* Задайте необходимую ширину */
+    flex: 0 0 100px; /* Это фиксирует ширину в Flexbox */
+  }
+
+  .flex-actions {
+    width: 200px; /* Задайте необходимую ширину */
+    flex: 0 0 200px; /* Это фиксирует ширину в Flexbox */
   }
 
   .content {
@@ -332,4 +415,3 @@
         cursor: not-allowed;
       }
 </style>
-

@@ -86,6 +86,7 @@ builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<ILanguagesService, LanguagesService>();
 builder.Services.AddScoped<IPagesService, PagesService>();
 
+
 builder.Services.AddScoped<IBlogsService, BlogsService>();
 
 
