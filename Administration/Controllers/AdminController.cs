@@ -63,6 +63,31 @@ namespace Administration.Controllers
 
         }
 
+        [HttpGet("IndexHierarchySorted"), ApiVersion("1")]
+        public IActionResult IndexHierarchySorted(string type, string indent_symbol, string indent_pre_symbol, int lang_id = 1)
+        {
+            try
+            {
+                var service = _serviceFactory.GetService(type);
+
+                if (service == null)
+                    return NotFound($"Service for type '{type}' not found.");
+
+
+                var lst = service.IndexHierarchySorted(indent_symbol, indent_pre_symbol, lang_id);
+                return Ok(lst);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogInfo($"AdminController.Index() :{ex.Message}");
+
+                return StatusCode(500, "Internal Server Error!");
+            }
+
+
+
+        }
+
         [HttpGet("IndexPaginated"), ApiVersion("1")]
         public IActionResult Index(string type, int page_num = 1,int page_size = 20, int lang_id = 1, string filter = "")
         {

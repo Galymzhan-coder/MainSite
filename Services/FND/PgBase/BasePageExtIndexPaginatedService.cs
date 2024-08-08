@@ -40,5 +40,7 @@ namespace Services.FND.PgBase
                 TotalPages = Convert.ToInt32(cnt)
             };
         }
+
+        public abstract string BuildFilterConditions(string filter);
     }
 }

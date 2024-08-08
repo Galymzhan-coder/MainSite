@@ -48,6 +48,40 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
             return sql;
         }
 
+        public string BuildSelectHierarchySortedCMD(string table, string fields, string parent_id_col, string id_col, string indented_field, string indent_symbol, string indent_pre_symbol, string whereConditions = "")
+        {
+            if (string.IsNullOrWhiteSpace(table))
+                return "Error: param \" table\" is empty!";
+
+            if (string.IsNullOrWhiteSpace(fields))
+                return "Error: param \" fields\" is empty!";
+
+            if (string.IsNullOrWhiteSpace(parent_id_col))
+                return "Error: param \" parent_id_col\" is empty!";
+
+            if (string.IsNullOrWhiteSpace(id_col))
+                return "Error: param \" id_col\" is empty!";
+            /*
+            var sql = $@"WITH RECURSIVE table_tree AS (
+                            SELECT {(string.IsNullOrEmpty(fields) ? "t.*" : fields)}, {id_col} AS sort_id, 0 AS depth 
+                            FROM {table} t WHERE {parent_id_col} IS NULL OR {parent_id_col} = 0
+                            UNION ALL
+                            SELECT {(string.IsNullOrEmpty(fields) ? "t.*" : fields)}, tt.sort_id, tt.depth + 1 
+                            FROM {table} t  INNER JOIN table_tree tt ON tt.{id_col} = t.{parent_id_col}
+                         )
+                        SELECT t.*, {(string.IsNullOrEmpty(indent_symbol)? "": fields.Replace(indented_field, $"REPEAT({indent_symbol}, depth * 2){(indent_symbol==" "? "" : "|")} || {indented_field} AS {indented_field}")))} FROM table_tree t {(string.IsNullOrEmpty(whereConditions)? "": $" WHERE {whereConditions}")} ORDER BY sort_id, depth";            
+            */
+            var sql = $@"WITH RECURSIVE table_tree AS (
+                            SELECT {(string.IsNullOrEmpty(fields) ? "t.*" : fields)}, {id_col} AS sort_id, 0 AS depth 
+                            FROM {table} t WHERE {parent_id_col} IS NULL OR {parent_id_col} = 0
+                            UNION ALL
+                            SELECT {(string.IsNullOrEmpty(fields) ? "t.*" : fields)}, tt.sort_id, tt.depth + 1 
+                            FROM {table} t  INNER JOIN table_tree tt ON tt.{id_col} = t.{parent_id_col}
+                         )
+                        SELECT t.*, {(string.IsNullOrEmpty(indent_symbol.Replace("'","")) ? "" : $"{(string.IsNullOrEmpty(indent_pre_symbol) ? "''" : $"'{indent_pre_symbol}'")} || REPEAT('{indent_symbol}', depth * 2) || {indented_field} AS indented_{indented_field}")} FROM table_tree t {(string.IsNullOrEmpty(whereConditions) ? "": $" WHERE { whereConditions}")} ORDER BY sort_id, depth";
+            return sql;
+        }
+
         public string BuildSelectPaginatedCMD(string tables, string fields, int page_num, int page_size, string whereConditions = "", string orderBy = "")
         {
             if (string.IsNullOrWhiteSpace(fields))

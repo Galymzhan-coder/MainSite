@@ -20,6 +20,7 @@ namespace Services.Factory
             { "contents",   ("content", typeof(IContentService), typeof(ContentDTO), "Текстовые страницы") },
             { "language",   ("languages", typeof(ILanguagesService), typeof(LanguagesDTO), "Язык") },
             { "blog",       ("blogs", typeof(IBlogsService), typeof(BlogsDTO), "Записи блога") },
+            { "top_managements",       ("top_management", typeof(ITopManagementService), typeof(TopManagementDTO), "Топ-менеджеры") }
         };
 
         public ServiceFactory(IServiceProvider serviceProvider)

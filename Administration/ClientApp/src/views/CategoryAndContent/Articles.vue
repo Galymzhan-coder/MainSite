@@ -58,13 +58,18 @@
                   <input type="text" v-model="articleStore.searchByPublishDate" placeholder="Search by Date" />
                 </div>
                 <div class="table-cell px-6 py-4 flex-category">
+                  <!--
                   <select class="w-[100px]" v-model="articleStore.searchByCategory">
                     <option></option>
                     <option>2023</option>
                     <option>2021</option>
                     <option>2022</option>
                     <option>2020</option>
-                  </select>
+                  </select>-->
+                  <Dropdown class="w-[100px]" :items="selectCategoryItems"
+                    idField="id"
+                    displayField="indented_title"
+                    v-model="articleStore.searchByCategory" />
                 </div>
                 <div class="table-cell px-6 py-4 flex-sefname">&nbsp;</div>
                 <div class="table-cell px-6 py-4 flex-active">&nbsp;</div>
@@ -73,13 +78,13 @@
             </div>
             <div class="table-body">
               <div class="table-row bg-white border-b dark:bg-gray-800 dark:border-gray-700 flex"
-                   v-for="(article, index) in paginatedArticles"
+                   v-for="(article, index) in articles"
                    :key="article.id"
                    @mouseover="hover = index"
                    @mouseleave="hover = null"
                    :class="{ 'bg-gray-200': hover === index }">
                 <div class="table-cell px-6 py-4 flex-first">{{ index + (currentPage - 1) * pageSize + 1 }}</div>
-                <div class="table-cell px-6 py-4 flex-title">{{ cleanTitle(article.title) }}</div>
+                <div class="table-cell px-6 py-4 flex-title">{{ cleanTitle(article.indented_title) }}</div>
                 <div class="table-cell px-6 py-4 flex-date">{{ formatDate(article.publish_date) }}</div>
                 <div class="table-cell px-6 py-4 flex-category">{{ article.category }}</div>
                 <div class="table-cell px-6 py-4 flex-sefname">{{ article.sefname }}</div>
@@ -113,6 +118,7 @@
   import ApiService from '@/services/api-service.js';
   import { formatDate, isNullOrEmpty } from '@/utils/formatters';
   import { useRouter } from 'vue-router';
+  import Dropdown from "@/components/DropdownSelector.vue";
 
   const router = useRouter();
   const apiService = new ApiService();
@@ -129,6 +135,7 @@
   let currentPage = ref(1);
   const pageSize = 20;
   const articles = ref([]);
+  const selectCategoryItems = ref([]);
 
   const filteredArticles = computed(() => {
     return filterArticles();
@@ -159,13 +166,22 @@
   };
 
   const fetchArticles = async (page = 1) => {
+    console.log('Articles1 fetchArticles, ', ' page=', page, ', paginatedArticles=', paginatedArticles);
     currentPage.value = page;
     try {
-      const data = await apiService.fetchPartOfDataByTypeLangFiltered('IndexPaginated', 'text_pages', page, pageSize, 1, '');
+
+      //selectCategoryItems.value = await apiService.fetchDataByTypeLang('IndexHierarchySorted', 'category', 1);
+      selectCategoryItems.value = await apiService.fetchDataHierarchyByTypeLang('IndexHierarchySorted', 'category', '------', '|', 1);
+      const filter = {
+        searchByName: articleStore.value.searchByName,
+        searchByPublishDate: articleStore.value.searchByPublishDate,
+        searchByCategory: articleStore.value.searchByCategory
+      };
+      const data = await apiService.fetchPartOfDataByTypeLangFiltered('IndexPaginated', 'text_pages', page, pageSize, 1, filter);
       articles.value = Array.isArray(data.items) ? data.items : []; // Убедитесь, что это массив
       totalPages.value = Math.ceil(data.totalPages / pageSize);
 
-      console.error('Articles fetchArticles, totalPages:', totalPages.value, ', data=', data, ', page=', page);
+      console.log('Articles fetchArticles, totalPages:', totalPages.value, ', data=', data, ', page=', page);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -181,8 +197,7 @@
     ],
     () => {
       // Фильтруем статьи и обновляем пагинацию при изменении поисковых параметров
-      filterArticles();
-      getPaginatedArticles();
+      fetchArticles();
     },
     { deep: true }
   );
