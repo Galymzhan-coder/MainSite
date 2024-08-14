@@ -64,7 +64,7 @@
       <div class="grid grid-cols-1 w-1/2" v-show="fileName && fileName.length > 0">
         <label class="text-sm">Названия файла</label>
         <span>{{ fileName }}</span>
-      </div>
+      </div> 
     </div>
     <div class="cropper w-[calc(100%-30%)]">
       <cropper src="@/" :stencil-size="{
