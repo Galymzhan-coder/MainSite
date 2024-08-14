@@ -417,3 +417,6 @@ healthchecksdb
 /NSKV3/obj/Debug/net7.0/project.razor.vs.json
 /Administration/ClientApp/src/pages/master/master.rar
 /Administration/ClientApp/src/pages/master/master.rar
+/Administration/appsettings.json
+/Administration/appsettings.json
+/Administration/internal_logs/internallog.txt
