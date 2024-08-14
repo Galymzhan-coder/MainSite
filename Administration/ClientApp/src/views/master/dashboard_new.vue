@@ -190,7 +190,7 @@
 
 <script>
 import MenuTree from "./MenuTree.vue";
-import MySvgIcon from "@/assets/images/insurance-svgrepo-com.svg";
+import MySvgIcon from "@/assets/images/insurance-svgrepo-com.svg"; 
 
 export default {
   components: {
