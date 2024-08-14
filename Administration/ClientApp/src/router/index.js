@@ -8,6 +8,9 @@ import  textPages  from '../views/TextPages/TextPages';
 import  textPagesEdit  from '../views/TextPages/TextPagesEdit';
 import Blog from "@/views/Blog/Blog.vue";
 
+import topManagement from '../views/TopManagement/TopManagement';
+import topManagementEdit from '../views/TopManagement/TopManagementEdit';
+
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 
@@ -70,6 +73,16 @@ const routes = [
         name: 'blog',
         path: '/blog',
         component: Blog,
+      },
+      {
+        name: 'TopManagement',
+        path: '/TopManagement',
+        component: topManagement,
+      },
+      {
+        name: 'topManagementEdit',
+        path: '/topManagement/:id',
+        component: topManagementEdit,
       },
     ],
   },

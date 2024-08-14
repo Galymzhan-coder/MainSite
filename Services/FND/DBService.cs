@@ -9,7 +9,7 @@ namespace Services.FND
     public abstract class DBService<T> : IBaseService<T>, IPagesCount where T : IDto, new()//IDBIerarchyService<T> where T : IDto, new()
     {
         private ODDANP _odp;
-        private string error ;
+        private string error;
         private string db_prefix = "db_nsk.";
         private string _tableName;
 

@@ -85,7 +85,7 @@ builder.Services.AddScoped<ISQLDeleteCommands, CPgDeleteCommands>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<ILanguagesService, LanguagesService>();
 builder.Services.AddScoped<IPagesService, PagesService>();
-
+builder.Services.AddScoped<ITopManagementService, TopManagementService>();
 
 builder.Services.AddScoped<IBlogsService, BlogsService>();
 
