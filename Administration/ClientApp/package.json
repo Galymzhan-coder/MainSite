@@ -19,6 +19,7 @@
     "sass": "^1.77.6",
     "vee-validate": "^4.10.7",
     "vue": "^3.2.13",
+    "vue-advanced-cropper": "^2.8.9",
     "vue-router": "^4.2.2",
     "vue-slide-toggle": "^1.1.1",
     "vue-slide-up-down": "^2.0.1",

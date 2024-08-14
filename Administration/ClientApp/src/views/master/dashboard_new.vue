@@ -170,16 +170,17 @@
         </div>
       </div>
       <div class="h-full bg-gray-50 p-[20px] top-0">
-        <div
-          class="absolute border border-gray-300 p-[20px] h-full border-none top-[50px] transform transition-transform duration-500 ease-in-out"
-          :class="{
+        <div class="absolute border border-gray-300 p-[20px] h-full border-none top-[50px] transform transition-transform duration-500 ease-in-out"
+             :class="{
             'w-[calc(100%-280px)] translate-x-[260px]': showSide,
             'w-[calc(100%-30px)] translate-x-0': !showSide,
-          }"
-        >
+          }">
           <transition name="page" mode="out-in">
             <router-view></router-view>
           </transition>
+          <div class="border-t-2 pt-4 pb-10">
+            <label class="">AO NSK © 2024</label>
+          </div>
         </div>
       </div>
       <!-- Main -->
