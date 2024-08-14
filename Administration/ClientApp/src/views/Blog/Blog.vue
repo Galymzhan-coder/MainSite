@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup> 
 const blogs = [ 
   {
     id: 1,
@@ -88,4 +88,3 @@ const blogs = [
 }
   
 </style>
-  
