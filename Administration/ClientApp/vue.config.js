@@ -35,6 +35,11 @@ module.exports = /*defineConfig(*/{
     port: 8084,
     https: false
   },
+  configureWebpack: {
+    performance: {
+      hints: false
+    },
+  },
     /*
     proxy: {
       '/api': {
