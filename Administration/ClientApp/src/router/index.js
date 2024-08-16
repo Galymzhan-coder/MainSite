@@ -4,8 +4,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import category from '../views/category/Category';
 import categoryEdit from '../views/category/CategoryEdit';
 
-import  textPages  from '../views/TextPages/TextPages';
-import  textPagesEdit  from '../views/TextPages/TextPagesEdit';
+import  textPages  from '../views/textPages/TextPages';
+import  textPagesEdit  from '../views/textPages/TextPagesEdit';
 import Blog from "@/views/Blog/Blog.vue";
 
 
