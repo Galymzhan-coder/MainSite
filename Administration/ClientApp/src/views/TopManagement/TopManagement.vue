@@ -16,7 +16,7 @@
 
       <div v-for="(item, index) in items" :key="item.id" class="grid grid-cols-6 gap-0" style="grid-template-columns: 0.5fr 6fr 6fr 2fr 2fr 2fr">
         <div class="p-2 border">{{index<9?'&nbsp;&nbsp;':''}}{{ index + 1 }}</div>
-        <div class="p-2 border">{{ item.title }}</div>
+        <div class="p-2 border">{{ item.full_name }}</div>
         <!--div class="p-2 border" :style="{ paddingLeft: (10 + (item.level * 50)) + 'px' }">{{ item.indented_title }}</!--div-->
         <!--div class="p-2 border" v-html="item.full_name"></!--div-->
         <div class="p-2 border">{{ item.title }}</div>

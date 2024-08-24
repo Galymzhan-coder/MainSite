@@ -8,7 +8,7 @@
           <form @submit.prevent="saveItem" v-if="itemsEdit">
 
             <div class="bg-gray-300 p-2 border"><label>Наименование:</label></div>
-            <input type="text" class="p-2 border w-full text-left" v-model="itemsEdit.title" />
+            <input type="text" class="p-2 border w-full text-left" v-model="itemsEdit.full_name" />
 
 
             <div class="bg-gray-300 p-2 border"><label>ЧПУ:</label></div>
