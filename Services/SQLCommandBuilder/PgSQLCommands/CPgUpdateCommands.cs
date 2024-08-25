@@ -68,7 +68,7 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
             if (value is string || value is DateTime)
                 return $"'{value.ToString().Replace("'", "''")}'"; // Очень простая обработка для предотвращения инъекций
             if (value is bool)
-                return (bool)value ? "1" : "0";
+                return (bool)value ? "true" : "false";
             return value.ToString();
         }
     }
