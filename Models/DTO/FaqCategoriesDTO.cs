@@ -8,7 +8,7 @@ using static Mysqlx.Notice.Warning.Types;
 
 namespace Models.DTO
 {
-    public class FaqCategoryDTO : IDto
+    public class FaqCategoriesDTO : IDto
     {
        
         public int id { get; set; }

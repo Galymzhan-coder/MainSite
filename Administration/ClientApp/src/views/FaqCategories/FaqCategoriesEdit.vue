@@ -7,12 +7,19 @@
         <div class="grid grid-cols-6 gap-0" style="grid-template-columns: 550px">
           <form @submit.prevent="saveItem" v-if="itemsEdit">
 
-            <div class="bg-gray-300 p-2 border"><label>ФИО:</label></div>
-            <input type="text" class="p-2 border w-full text-left" v-model="itemsEdit.full_name" />
+            <div class="bg-gray-300 p-2 border"><label>Наименование:</label></div>
+            <input type="text" class="p-2 border w-full text-left" v-model="itemsEdit.title" />
 
+            <div class="bg-gray-300 p-2 border"><label>Родитель:</label></div>
+            <div class="p-2 border w-full text-left">
+              <select v-model="selectedItem">
+                <option disabled value="">Выберите значение</option>
+                <option v-for="item in items" :key="item.id" :value="item">{{ item.title }}</option>
+              </select>
+            </div>
 
-            <div class="bg-gray-300 p-2 border"><label>Должность:</label></div>
-            <input v-model="itemsEdit.title" type="text" class="p-2 border w-full text-left" />
+            <div class="bg-gray-300 p-2 border"><label>ЧПУ:</label></div>
+            <input v-model="itemsEdit.sefname" type="text" class="p-2 border w-full text-left" />
 
             <div class="bg-gray-300 p-2 border"><label>Описание:</label></div>
             <!--<textarea v-model="itemsEdit.description" class="p-2 border w-full text-left resize-none" ></textarea>-->
@@ -62,10 +69,10 @@
   import { reactive } from 'vue'
   import { quillEditor } from 'vue3-quill'
 
-  //const items = ref([]);
+  const items = ref([]);
   const apiService = new ApiService();
   let itemsEdit = ref(null);
-  //let selectedItem = ref(null);
+  let selectedItem = ref(null);
   let content = "";
   let quillInstance = ref(null);
   /*
@@ -87,37 +94,58 @@
 
   onMounted(async () => {
     try {
-      //const data = await apiService.fetchDataByType('GetIerarchyList', 'category');
-      //items.value = data;
+      const data = await apiService.fetchDataByType('GetIerarchyList', 'category');
+      items.value = data;
       //console.log("router=", router, ", id=", route.params.id);
       //selectedItem = ref(items.value.find(item => item.id === itemsEdit.parentId)?.title || null);
       //selectedItem = ref(items.value.map(item => item.id == itemsEdit.parentId).values);
 
       let id = route.params.id;
       //const editData = await apiService.fetchDataById('GetCategoryItem', id);
-      const editData = await apiService.fetchDataByTypeId('GetItem', 'top_managements', id);
+      const editData = await apiService.fetchDataByTypeId('GetItem', 'category', id);
       itemsEdit.value = editData;
-      //selectedItem = items.value.find(item => item.id === editData.parent_id);
+      selectedItem = items.value.find(item => item.id === editData.parent_id);
 
       //if (itemsEdit.value && itemsEdit.value.description) {
-      content = itemsEdit.value.text;
-      state._content = itemsEdit.value.text;
+      content = itemsEdit.value.description;
+      state._content = itemsEdit.value.description;
       //}
       //formItems.id = editData.id;
 
       //itemsEdit.value.is_active = itemsEdit.value.is_active === 1 ? true : false;
 
-      console.log("TopManagementEdit id=", id, ", route.params.id=", route.params.id, ", editData=", editData, " , itemsEdit.value.text=", itemsEdit.value.text);
+      console.log("CategoryEdit id=", id, ", route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData, " , itemsEdit.value.description=", itemsEdit.value.description);
       console.log("itemsEdit=", itemsEdit);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   });
-
-  
+  /*
+  const descriptionValue = computed(() => itemsEdit && itemsEdit.description);
+  const description = computed({
+    get: () => itemsEdit && itemsEdit.description,
+    set: (value) => {
+      if (itemsEdit) {
+        itemsEdit.description = value;
+      }
+    },
+  });
+  /*
+  selectedItem = computed(() => {
+    const item = items.value.find(item => item.id === itemsEdit.value.parent_id);
+    return item ? item : null;
+  });
+  */
+  //const selectedItem = ref(items.value.find(item => item.id === itemsEdit.parentId)?.title || null);
+  /*
+  watch(selectedItem, (newValue) => {
+    // newValue содержит новое выбранное значение
+    formData.value.parent_id = newValue; // Предполагается, что у formData есть свойство parentId, измените это на ваше актуальное свойство
+  });
+  */
   watch(() => itemsEdit.value, (newVal) => {
-    if (newVal && newVal.text) {
-      content = newVal.text;
+    if (newVal && newVal.description) {
+      content = newVal.description;
       if (quillInstance.value) {
         quillInstance.value.setContents(quillInstance.value.clipboard.convert(content));
       }
@@ -154,15 +182,13 @@
       let id = route.params.id;
       //const postData = { type: 'categories', id: id, dto: itemsEdit };
       console.log("saveItem itemsEdit.value=", itemsEdit.value);
-      //itemsEdit.value.is_active = itemsEdit.value.is_active === 1 ? true : false;
       //const postData = { dto: { ...itemsEdit.value } };
       const postData = { ...itemsEdit.value };
       console.log("saveItem postData=", postData);
       //await apiService.sendData('Update', postData);
 
       //await apiService.sendData(`Update/categories/${id}`, postData, 'post')
-
-      await apiService.sendData(`Update?type=top_managements&id=${id}`, postData, 'post')
+      await apiService.sendData(`Update?type=category&id=${id}`, postData, 'post')
         .then(response => {
 
           console.log("saveItem response=", response);
@@ -178,12 +204,12 @@
     }
 
     emit('save', formData.value);
-    goToPage('/TopManagement');
+    goToPage('/category');
   }
 
   function cancel() {
     //emit('cancel');
-    goToPage('/TopManagement');
+    goToPage('/category');
   }
 
   function goToPage(url) {
@@ -285,7 +311,7 @@
     quillInstance.value = quill;
 
     //if (itemsEdit.value && itemsEdit.value.description) {
-    content = itemsEdit.value.text;
+    content = itemsEdit.value.description;
     //}
     let delta = quill.clipboard.convert(content);
     quill.setContents(delta, 'silent');
@@ -297,7 +323,7 @@
     console.log('editor change! quill=', quill, ", html=", html, ", text=", text, ", itemsEdit=", itemsEdit, ", this.state=", state);
 
     state._content = html;
-    itemsEdit.value.text = html;
+    itemsEdit.value.description = html;
 
 
   }

@@ -4,10 +4,12 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import category from '../views/category/Category';
 import categoryEdit from '../views/category/CategoryEdit';
 
-import  textPages  from '../views/textPages/TextPages';
-import  textPagesEdit  from '../views/textPages/TextPagesEdit';
+import  TextPages  from '@/views/TextPages/TextPages';
+import  TextPagesEdit  from '@/views/TextPages/TextPagesEdit';
 import Blog from "@/views/Blog/Blog.vue";
 
+import TopManagement from '../views/TopManagement/TopManagement';
+import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 import BlogEdit from "@/views/Blog/BlogEdit.vue";
@@ -60,12 +62,12 @@ const routes = [
       {
         name: 'TextPages',
         path: '/TextPages',
-        component: textPages,
+        component: TextPages,
       },
       {
         name: 'TextPagesEdit',
         path: '/TextPagesEdit/:id',
-        component: textPagesEdit,
+        component: TextPagesEdit,
       },
       {
         name: 'blog',
@@ -82,6 +84,16 @@ const routes = [
             component: BlogEdit
           }
         ]
+      },
+      {
+        name: 'TopManagement',
+        path: '/TopManagement',
+        component: TopManagement,
+      },
+      {
+        name: 'TopManagementEdit',
+        path: '/TopManagement/:id',
+        component: TopManagementEdit,
       },
     ],
   },
