@@ -1,4 +1,4 @@
-//import store from "@/store";
+import store from "@/store";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import category from '../views/category/Category';
@@ -97,9 +97,9 @@ const router = createRouter({
 });
 
 /* Проверка верификация */
-/*
+
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some((route) => route.meta.requiresAuth)) {
+  if (to.meta.requiresAuth) {
     if (store.state.authStore.token) {
       next();
     } else {
@@ -108,6 +108,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next();
   }
-});*/
+});
 
 export default router;
