@@ -61,31 +61,16 @@
           <input ref="fileInput" style="display: none" type="file" accept="image/*" @change="uploadFile" />
         </div>
       </div>
-      <div class="grid grid-cols-1 w-1/2" v-show="imgObj.imgName && imgObj.imgName.length > 0">
+      <div class="grid grid-cols-1 w-1/2" v-show="fileName && fileName.length > 0">
         <label class="text-sm">Названия файла</label>
-        <span>{{ imgObj.imgName }}</span>
+        <span>{{ fileName }}</span>
       </div> 
     </div>
-    <div class="" v-show="imgObj.imgName && imgObj.imgName.length > 0">
-      <cropper class="cropper-container"
-               :src="imgObj.imgSrc"
-               :stencil-props="{ aspectRatio: 14/10, movable:true, resizable: true, minWidth: 200, minHeight: 150 }"
-               :stecil-size="{ width: 300, height:300 }"
-              :resize-image="{
-                  adjustStencil: false,
-                  minWidth: 100, 
-                  minHeight: 100 
-                }"
-               image-restriction="stencil"
-      :style="{
-    maxWidth: '100%', 
-    maxHeight: '100%', 
-    width: imgObj.imgWidth > parentWidth ? '100%' : imgObj.imgWidth + 'px',
-    height: 'auto',
-    objectFit: 'contain',
-    backgroundColor: 'transparent'
-  }"
-      />
+    <div class="cropper w-[calc(100%-30%)]">
+      <cropper src="@/" :stencil-size="{
+		width: 280,
+		height: 280
+	}" :auto-zoom="true"/>
     </div>
     <div class="flex items-center mb-4">
       <input id="useful-checkbox" type="checkbox" value="" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -167,26 +152,12 @@ import { ref, reactive } from 'vue';
     }
   };
 
-  const imgObj = reactive({
-    imgName: '',
-    imgSrc: '',
-    imgHeight: 0,
-    imgWidth: 0
-  });
+  let fileName = ref('');
 
   const uploadFile = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
-
-      img.onload = () => {
-        imgObj.imgName = file.name;
-        imgObj.imgSrc = objectUrl;
-        imgObj.imgWidth = img.width;
-        imgObj.imgHeight = img.height;
-      }
-      img.src = objectUrl;
+      fileName.value = file.name;
     }
   }
 
@@ -198,9 +169,6 @@ import { ref, reactive } from 'vue';
     line-height: 2.25rem; /* Убедитесь, что текст правильно выровнен по вертикали */
   }
 </style>
-<style>
+<style scoped>
 
-  .vue-advanced-cropper__background {
-    background-image: url("../../assets/black-white.png");
-  }
 </style>
