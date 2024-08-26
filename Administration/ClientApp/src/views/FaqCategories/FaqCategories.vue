@@ -58,9 +58,9 @@
     <div class="flex flex-col">
       <div class="grid grid-cols-6 gap-0" style="grid-template-columns: 0.5fr 6fr 2fr 2fr 2fr 0.5fr">
         <div class="bg-gray-300 p-2 border">№</div>
-        <div class="bg-gray-300 p-2 border">Полное имя</div>
-        <div class="bg-gray-300 p-2 border">Заголовок</div>
-        <div class="bg-gray-300 p-2 border">Позиция</div>
+        <div class="bg-gray-300 p-2 border">Категория</div>
+        <div class="bg-gray-300 p-2 border">Вопрос</div>
+        <div class="bg-gray-300 p-2 border">Ответ</div>
         <div class="bg-gray-300 p-2 border">Активность</div>
         <div class="bg-gray-300 p-2 border">Действия</div>
       </div>
