@@ -30,6 +30,7 @@ app.Run();
 
 //using Administration.Factories;
 //using Administration.Factories.Interfaces;
+using Administration.Configs.Image;
 using Administration.Helpers;
 using Administration.Interfaces;
 using Administration.Services;
@@ -88,6 +89,7 @@ builder.Services.AddScoped<IPagesService, PagesService>();
 builder.Services.AddScoped<ITopManagementService, TopManagementService>();
 
 
+
 builder.Services.AddScoped<IBlogsService, BlogsService>();
 
 
@@ -129,12 +131,16 @@ builder.Logging.AddConsole();
 
 builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
 
+// SaveImage Config
+builder.Services.Configure<ImageConfig>(builder.Configuration.GetSection("ImageConfig"));
+
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
