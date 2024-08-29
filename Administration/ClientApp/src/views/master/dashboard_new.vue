@@ -299,9 +299,9 @@ export default {
             {
               id: 9,
               label: "Category",
+              path: "/blog/category",
               routerClass:
                 "inline-flex relative items-center py-[10px] px-[20px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800 transition duration-400 ease-in-out",
-              path: "/category",
               svg: `<svg class="h-5 w-5 text-white"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">
                       <line x1="21" y1="10" x2="3" y2="10" />
                       <line x1="21" y1="6" x2="3" y2="6" />

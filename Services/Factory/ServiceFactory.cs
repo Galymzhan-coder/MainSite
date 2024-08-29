@@ -15,12 +15,13 @@ namespace Services.Factory
         private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<string, (string, Type, Type, string)> _serviceTypes = new Dictionary<string, (string, Type, Type, string)>
         {
-            { "category",   ("categories", typeof(ICategoriesService), typeof(CategoryDTO), "Категория") },
-            { "text_pages", ("pages", typeof(IPagesService), typeof(PagesDTO), "Статьи") },
-            { "contents",   ("content", typeof(IContentService), typeof(ContentDTO), "Текстовые страницы") },
-            { "language",   ("languages", typeof(ILanguagesService), typeof(LanguagesDTO), "Язык") },
-            { "blog",       ("blogs", typeof(IBlogsService), typeof(BlogsDTO), "Записи блога") },
-            { "top_managements",       ("top_management", typeof(ITopManagementService), typeof(TopManagementDTO), "Топ-менеджеры") }
+            { "category",        ("categories", typeof(ICategoriesService), typeof(CategoryDTO), "Категория") },
+            { "text_pages",      ("pages", typeof(IPagesService), typeof(PagesDTO), "Статьи") },
+            { "contents",        ("content", typeof(IContentService), typeof(ContentDTO), "Текстовые страницы") },
+            { "language",        ("languages", typeof(ILanguagesService), typeof(LanguagesDTO), "Язык") },
+            { "blog",            ("blogs", typeof(IBlogsService), typeof(BlogsDTO), "Записи блога") },
+            { "blog_ctg",        ("blog_categories", typeof(IBlogCategoriesService), typeof(BlogCategoriesDTO), "Категории блога") },
+            { "top_managements", ("top_management", typeof(ITopManagementService), typeof(TopManagementDTO), "Топ-менеджеры") }
         };
 
         public ServiceFactory(IServiceProvider serviceProvider)

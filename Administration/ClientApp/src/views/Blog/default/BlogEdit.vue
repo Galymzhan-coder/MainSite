@@ -245,6 +245,6 @@ import { ref, reactive } from 'vue';
 <style>
 
   .vue-advanced-cropper__background {
-    background-image: url("../../assets/black-white.png");
+    background-image: url("../../../assets/black-white.png");
   }
 </style>

@@ -44,6 +44,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\store\blogs\" />
+    <Folder Include="ClientApp\src\views\Blog\categories\" />
     <Folder Include="wwwroot\media\" />
     <Folder Include="wwwroot\uploaded-images\" />
     <Folder Include="internal_logs\" />

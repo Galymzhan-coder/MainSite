@@ -6,13 +6,18 @@ import categoryEdit from '../views/category/CategoryEdit';
 
 import  TextPages  from '@/views/TextPages/TextPages';
 import  TextPagesEdit  from '@/views/TextPages/TextPagesEdit';
-import Blog from "@/views/Blog/Blog.vue";
 
 import TopManagement from '../views/TopManagement/TopManagement';
 import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
-import BlogEdit from "@/views/Blog/BlogEdit.vue";
+
+
+import BlogCategories from "@/views/Blog/categories/Category";
+import Blog from "@/views/Blog/default/Blog";
+import BlogEdit from "@/views/Blog/default/BlogEdit";
+
+
 
 const routes = [
   {
@@ -82,6 +87,11 @@ const routes = [
             name: 'blog-update',
             path: 'update?:id',
             component: BlogEdit
+          },
+          {
+            name: 'blog-category',
+            path: 'category',
+            component: BlogCategories
           }
         ]
       },
