@@ -21,6 +21,7 @@ namespace Services.Factory
             { "language",        ("languages", typeof(ILanguagesService), typeof(LanguagesDTO), "Язык") },
             { "blog",            ("blogs", typeof(IBlogsService), typeof(BlogsDTO), "Записи блога") },
             { "blog_ctg",        ("blog_categories", typeof(IBlogCategoriesService), typeof(BlogCategoriesDTO), "Категории блога") },
+            { "city",            ("cities", typeof(ICitiesService), typeof(CitiesDTO), "Категории блога") },
             { "top_managements", ("top_management", typeof(ITopManagementService), typeof(TopManagementDTO), "Топ-менеджеры") }
         };
 

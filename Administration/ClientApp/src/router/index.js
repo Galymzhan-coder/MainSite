@@ -1,5 +1,5 @@
 import store from "@/store";
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import category from '../views/category/Category';
 import categoryEdit from '../views/category/CategoryEdit';
@@ -16,7 +16,7 @@ import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 import BlogCategories from "@/views/Blog/categories/Category";
 import Blog from "@/views/Blog/default/Blog";
 import BlogEdit from "@/views/Blog/default/BlogEdit";
-
+import Cities from "@/views/Contacts/Cities/Index";
 
 
 const routes = [
@@ -85,13 +85,30 @@ const routes = [
           },
           {
             name: 'blog-update',
-            path: 'update?:id',
+            path: 'update/:id',
             component: BlogEdit
           },
           {
             name: 'blog-category',
             path: 'category',
             component: BlogCategories
+          }
+        ]
+      },
+      {
+        name: 'contacts',
+        path: '/contacts',
+        children: [
+          {
+            name: 'cities',
+            path: 'cities',
+            children: [
+              {
+                name: 'index',
+                path: 'index',
+                component: Cities
+              }
+            ]
           }
         ]
       },
@@ -112,7 +129,7 @@ const routes = [
 let base = "admin.vue/";
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   base,
   routes,
   linkActiveClass: "active",

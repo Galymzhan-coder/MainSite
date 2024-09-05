@@ -130,6 +130,7 @@ namespace Services.FND
 
         }
 
+
         public override string BuildFilterConditions(string filter)
         {
             throw new NotImplementedException();

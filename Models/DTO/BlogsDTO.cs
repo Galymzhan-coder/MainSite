@@ -11,16 +11,16 @@ namespace Models.DTO
     {
         public int id {  get; set; }
         public string? category_name {  get; set; }
-        public string? title { get; set; } = null;
-        public string? description { get; set; } = null;
-        public string? text { get; set; } = null;
+        public string? title { get; set; }
+        public string? description { get; set; }
+        public string? text { get; set; }
         public DateTime publish_date { get; set; }
-        public string? sefname { get; set; } = null;
+        public string? sefname { get; set; }
         public int? views { get; set; }
         public bool is_active { get; set; }
         public DateTime create_date { get; set; }
         public DateTime update_date { get; set; }
-        public string? image { get; set; } = null;
+        public string? image { get; set; }
         public bool is_usefull { get; set; }
         public bool is_mainpage { get; set; }
 

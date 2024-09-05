@@ -11,20 +11,16 @@ namespace Models.DTO
     {
         public int blog_id { get; set; }
         public int lang_id { get; set; }
-        public string title { get; set; } = null;
-        public string description { get; set; } = null;
-        public string text { get; set; } = null;
+        public string? title { get; set; }
+        public string? description { get; set; }
+        public string? text { get; set; }
 
         public void SetDefaultValues()
         {
             blog_id = 0;
-
             lang_id = 1;
-
             title = string.Empty;
-
             description = string.Empty;
-
             text = string.Empty;
         }
     }

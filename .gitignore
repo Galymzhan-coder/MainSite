@@ -349,12 +349,12 @@ healthchecksdb
 
 /CoreService/internal_logs
 /Administration/ClientApp/.gitignore
-
+/Administration/wwwroot/
 /Administration/dist/
 /Administration/ClientApp/node_modules/
 /Administration/ClientApp/dist/
 /Administration/ClientApp/ClientApp/dist/
-/Administration/internal_logs/
+/Administration/internal_logs/*
 /Administration/tests/e2e/reports/
 /Administration/obj/
 /Administration/obj/Debug/
