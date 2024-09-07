@@ -38,6 +38,7 @@ builder.Services.AddScoped<ILanguagesService, LanguagesService>();
 builder.Services.AddScoped<IPagesService, PagesService>();
 builder.Services.AddScoped<ITopManagementService, TopManagementService>();
 builder.Services.AddScoped<IBlogCategoriesService, BlogCategoriesService>();
+builder.Services.AddScoped<IFaqCategoriesService, FaqCategoriesService>();
 
 
 builder.Services.AddScoped<IBlogsService, BlogsService>();

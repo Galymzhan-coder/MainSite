@@ -73,6 +73,7 @@
   const apiService = new ApiService();
   let itemsEdit = ref(null);
   let selectedItem = ref(null);
+  let selectedItemProduct = ref(null);
   let content = "";
   let quillInstance = ref(null);
   /*
@@ -94,7 +95,7 @@
 
   onMounted(async () => {
     try {
-      const data = await apiService.fetchDataByType('GetIerarchyList', 'category');
+      const data = await apiService.fetchDataByType('GetIerarchyList', 'faq_category');
       items.value = data;
       //console.log("router=", router, ", id=", route.params.id);
       //selectedItem = ref(items.value.find(item => item.id === itemsEdit.parentId)?.title || null);
@@ -102,7 +103,7 @@
 
       let id = route.params.id;
       //const editData = await apiService.fetchDataById('GetCategoryItem', id);
-      const editData = await apiService.fetchDataByTypeId('GetItem', 'category', id);
+      const editData = await apiService.fetchDataByTypeId('GetItem', 'faq_category', id);
       itemsEdit.value = editData;
       selectedItem = items.value.find(item => item.id === editData.parent_id);
 
@@ -114,7 +115,7 @@
 
       //itemsEdit.value.is_active = itemsEdit.value.is_active === 1 ? true : false;
 
-      console.log("CategoryEdit id=", id, ", route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData, " , itemsEdit.value.description=", itemsEdit.value.description);
+      console.log("FaqCategoryEdit id=", id, ", route.params.id=", route.params.id, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData);
       console.log("itemsEdit=", itemsEdit);
     } catch (error) {
       console.error('Error fetching data:', error);

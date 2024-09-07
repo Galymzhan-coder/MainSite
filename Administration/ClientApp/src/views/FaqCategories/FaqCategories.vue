@@ -3,82 +3,25 @@
     <button @click="addItem" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4">
       Добавить
     </button>
-
-    <template>
-      <div class="products-index">
-        <div class="page-heading">
-          <h1><i class="icon-list-1"></i> {{ title }}</h1>
-        </div>
-        <p>
-          <button @click="createFaqCategories" class="btn btn-success">
-            Создать вопрос-ответ
-          </button>
-        </p>
-        <div class="widget">
-          <div class="widget-content">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Категория</th>
-                  <th>Вопрос</th>
-                  <th>Ответ</th>
-                  <th>Активность</th>
-                  <th>Действия</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(manager, index) in managers" :key="manager.id">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ manager.full_name }}</td>
-                  <td>{{ manager.title }}</td>
-                  <td>{{ manager.position }}</td>
-                  <td>
-                    <input type="checkbox"
-                           :checked="manager.is_active"
-                           @change="toggleActive(manager)" />
-                  </td>
-                  <td>
-                    <button @click="editManager(manager.id)">Редактировать</button>
-                    <button @click="deleteManager(manager.id)">Удалить</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div v-if="loading" class="loading">Загрузка...</div>
-            <pagination v-if="pagination"
-                        :pagination="pagination"
-                        @page-changed="fetchManagers" />
-          </div>
-        </div>
-      </div>
-    </template>
         
 
     <div class="flex flex-col">
-      <div class="grid grid-cols-6 gap-0" style="grid-template-columns: 0.5fr 6fr 2fr 2fr 2fr 0.5fr">
+      <div class="grid grid-cols-6 gap-0" style="grid-template-columns: 0.5fr 6fr 2fr 2fr 2fr">
         <div class="bg-gray-300 p-2 border">№</div>
-        <div class="bg-gray-300 p-2 border">Категория</div>
-        <div class="bg-gray-300 p-2 border">Вопрос</div>
-        <div class="bg-gray-300 p-2 border">Ответ</div>
+        <div class="bg-gray-300 p-2 border">Наименование</div>
+        <div class="bg-gray-300 p-2 border">Родитель</div>
         <div class="bg-gray-300 p-2 border">Активность</div>
         <div class="bg-gray-300 p-2 border">Действия</div>
       </div>
 
       <div v-for="(item, index) in items" :key="item.id" class="grid grid-cols-6 gap-0" style="grid-template-columns: 0.5fr 6fr 2fr 2fr 2fr">
         <div class="p-2 border">{{ index + 1 }}</div>
-        <!--<div class="p-2 border">{{ item.title }}</div>-->
+        <div class="p-2 border">{{ item.title }}</div>
+        <div class="p-2 border">{{ item.parent_id }}</div>
         <!--div class="p-2 border" :style="{ paddingLeft: (10 + (item.level * 50)) + 'px' }">{{ item.indented_title }}</!--div-->
-        <div class="p-2 border" :style="{ paddingLeft: (10 + (item.level * 50)) + 'px' }" v-html="item.indented_title"></div>
+        <!--div class="p-2 border" :style="{ paddingLeft: (10 + (item.level * 50)) + 'px' }" v-html="item.indented_title"></!--div-->
 
-        <div class="p-2 border">
-          <button @click="moveUp(index)" :disabled="index === 0" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mr-2">
-            <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <circle cx="12" cy="12" r="9" />  <line x1="12" y1="8" x2="8" y2="12" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="16" y1="12" x2="12" y2="8" /></svg>
-          </button>
-          <button @click="moveDown(index)" :disabled="index === items.length - 1" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4">
-            <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <circle cx="12" cy="12" r="9" />  <line x1="8" y1="12" x2="12" y2="16" />  <line x1="12" y1="8" x2="12" y2="16" />  <line x1="16" y1="12" x2="12" y2="16" /></svg>
-          </button>
-        </div>
+        
         <div class="p-2 border">
           <input type="checkbox" v-model="item.is_active" @change="() => ChangeData(item)" />
         </div>
@@ -112,7 +55,7 @@
   onMounted(async () => {
     try {
       //const data = await apiService.fetchData('Index');
-      const data = await apiService.fetchDataByTypeLang('Index', 'category', 1); //await apiService.fetchDataByType('Index','category');
+      const data = await apiService.fetchDataByTypeLang('Index', 'faq_category', 1); //await apiService.fetchDataByType('Index','category');
 
       items.value = data;//data.sort((a,b) => a.id - b.id);
     } catch (error) {
@@ -122,18 +65,6 @@
 
   function addItem() {
     items.value.push({ id: items.value.length + 1, name: `Item ${items.value.length + 1}`, active: true });
-  }
-
-  function moveUp(index) {
-    if (index > 0) {
-      [items.value[index - 1], items.value[index]] = [items.value[index], items.value[index - 1]];
-    }
-  }
-
-  function moveDown(index) {
-    if (index < items.value.length - 1) {
-      [items.value[index], items.value[index + 1]] = [items.value[index + 1], items.value[index]];
-    }
   }
 
 

@@ -12,6 +12,7 @@ import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 
+import FaqCategories from '../views/FaqCategories/FaqCategories';
 
 import BlogCategories from "@/views/Blog/categories/Category";
 import Blog from "@/views/Blog/default/Blog";
@@ -104,6 +105,11 @@ const routes = [
         name: 'TopManagementEdit',
         path: '/TopManagement/:id',
         component: TopManagementEdit,
+      },
+      {
+        name: 'FaqCategories',
+        path: '/FaqCategories',
+        component: FaqCategories,
       },
     ],
   },
