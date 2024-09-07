@@ -12,26 +12,26 @@
     <path d="M416.142,378.18H147.537c-22.092,0-40,17.908-40,40s17.908,40,40,40h268.604c22.092,0,40-17.908,40-40   S438.233,378.18,416.142,378.18z" />
       </g>
     </svg>
-    <span>Категории блога</span>
+    <span>Города</span>
   </div>
   <div class="p-4 border text-sm">
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4">
-      Создать категорию
+      Создать город
     </button>
     <div class="flex flex-col">
-      <div class="grid grid-cols-4 gap-0 grid-cols-custom font-semibold">
+      <div class="grid grid-cols-7 gap-0 grid-cols-custom font-semibold">
         <div class="bg-gray-300 px-3 py-2 border">#</div>
         <div class="bg-gray-300 px-3 py-2 border">Наименование</div>
         <div class="bg-gray-300 px-3 py-2 border">Активность</div>
         <div class="bg-gray-300 px-3 py-2 border">Действия</div>
       </div>
-      <div v-for="(blog, index) in filteredBlogs" :key="blog.id" class="grid grid-cols-7 gap-0 grid-cols-custom">
-        <div class="px-3 py-3 border flex-1">{{ ++index }}</div>
-        <div class="px-3 py-3 border flex-1 break-words">{{ blog.title }}</div>
+      <div v-for="(city, index) in filteredCities" :key="city.id" class="grid grid-cols-7 gap-0 grid-cols-custom">
+        <div class="px-3 py-3 border flex-1">{{ (currentPage - 1) * pageSize + index + 1 }}</div>
+        <div class="px-3 py-3 border flex-1 break-words">{{ cleanTitle(city.title) }}</div>
         <div class="px-3 py-3 border flex-1 flex items-center justify-center">
           <button class="text-white font-bold py-2 px-2 w-[40px] flex items-center justify-center"
-                  :class="{ 'bg-blue-500 hover:bg-blue-600': blog.is_active, 'bg-gray-400 hover:bg-gray-500': !blog.is_active}">
-            <svg v-if="blog.is_active" class="h-5 w-5" fill="#ffffff" height="24" width="24" version="1.1" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+                  :class="{ 'bg-blue-500 hover:bg-blue-600': city.is_active, 'bg-gray-400 hover:bg-gray-500': !city.is_active}">
+            <svg v-if="city.is_active" class="h-5 w-5" fill="#ffffff" height="24" width="24" version="1.1" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
               <g>
                 <path d="m494.8,241.4l-50.6-49.4c-50.1-48.9-116.9-75.8-188.2-75.8s-138.1,26.9-188.2,75.8l-50.6,49.4c-11.3,12.3-4.3,25.4 0,29.2l50.6,49.4c50.1,48.9 116.9,75.8 188.2,75.8s138.1-26.9 188.2-75.8l50.6-49.4c4-3.8 11.7-16.4 0-29.2zm-238.8,84.4c-38.5,0-69.8-31.3-69.8-69.8 0-38.5 31.3-69.8 69.8-69.8 38.5,0 69.8,31.3 69.8,69.8 0,38.5-31.3,69.8-69.8,69.8zm-195.3-69.8l35.7-34.8c27-26.4 59.8-45.2 95.7-55.4-28.2,20.1-46.6,53-46.6,90.1 0,37.1 18.4,70.1 46.6,90.1-35.9-10.2-68.7-29-95.7-55.3l-35.7-34.7zm355,34.8c-27,26.3-59.8,45.1-95.7,55.3 28.2-20.1 46.6-53 46.6-90.1 0-37.2-18.4-70.1-46.6-90.1 35.9,10.2 68.7,29 95.7,55.4l35.6,34.8-35.6,34.7z" />
               </g>
@@ -51,30 +51,39 @@
         </div>
       </div>
     </div>
+    <Pagination :currentPage="currentPage" :totalPages="totalPages" @page-changed="fetchBlogs" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import ApiService from '@/services/api-service.js';
-import { useRouter } from 'vue-router';
+import Pagination from "@/components/PageNavigationBar";
+import { isNullOrEmpty } from '@/utils/formatters';
 
-const router = useRouter();
-const filteredBlogs = ref([]);
+
+let totalPages = ref(1);
+let currentPage = ref(1);
+const pageSize = 20;
+const filteredCities = ref([]);
 const apiService = new ApiService();
 
-const fetchBlogs = async () => {
+const cleanTitle = (title) => {
+    return isNullOrEmpty(title) ? title : title.replace(/&nbsp;/g, ' ');
+  };
+const fetchBlogs = async (page = 1) => {
+  currentPage = page;
   try {
-    const data = await apiService.fetchPartOfDataByTypeLang('Index', 'blog_ctg', 1);
-    filteredBlogs.value = data;
+      const data = await apiService.fetchPartOfDataByTypeLang('IndexPaginated', 'city', page, pageSize, 1);
+      filteredCities.value = Array.isArray(data.items) ? data.items : []; // Убедитесь, что это массив
+      totalPages = Math.ceil(data.totalPages / pageSize);
     } catch (error) {
       console.error('Error fetching data:', error);
+      filteredCities.value = []; // Убедитесь, что это массив даже при ошибке
     }
 };
 
-const blogEdit = (id) => {
-  router.push({ name: 'blog-update', params: { id: id } });
-}
+
 
 
 
@@ -86,6 +95,6 @@ onMounted(() => {
 
 <style scoped>
   .grid-cols-custom {
-    grid-template-columns: 5% 55% 10% 30%;
+    grid-template-columns: 10% 60% 10% 20%;
   }
 </style>

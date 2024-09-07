@@ -294,7 +294,7 @@ export default {
                       <rect x="14" y="4" width="6" height="6" rx="1" />
                       <rect x="4" y="14" width="6" height="6" rx="1" />
                       <rect x="14" y="14" width="6" height="6" rx="1" />
-                      </svg>`,
+                      </svg>`
             },
             {
               id: 9,
@@ -346,7 +346,7 @@ export default {
           label: "Contacts",
           routerClass:
             "inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium border-gray-200 bg-gray-700 hover:bg-gray-300 hover:text-gray-800 transition duration-400 ease-in-out",
-          path: "/category",
+          path: "/contacts",
           svg: `<svg class="h-5 w-5 text-white-300"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 5H7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2V7a2 2 0 0 0 -2 -2h-2" />  <rect x="9" y="3" width="6" height="4" rx="2" />  <line x1="9" y1="12" x2="9.01" y2="12" />  <line x1="13" y1="12" x2="15" y2="12" />  <line x1="9" y1="16" x2="9.01" y2="16" />  <line x1="13" y1="16" x2="15" y2="16" /></svg>`,
           children: [
             {
@@ -354,15 +354,15 @@ export default {
               label: "Offices",
               routerClass:
                 "inline-flex relative items-center py-[10px] px-[20px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800 transition duration-400 ease-in-out",
-              path: "/category",
+              path: "",
               svg: `<svg class="h-5 w-5 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="4" y="4" width="6" height="6" rx="1" />  <rect x="14" y="4" width="6" height="6" rx="1" />  <rect x="4" y="14" width="6" height="6" rx="1" />  <rect x="14" y="14" width="6" height="6" rx="1" /></svg>`,
             },
             {
               id: 15,
               label: "Cities",
+              path: "/contacts/cities/index",
               routerClass:
                 "inline-flex relative items-center py-[10px] px-[20px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-900 hover:text-white-800 transition duration-400 ease-in-out",
-              path: "/category",
               svg: `<svg class="h-5 w-5 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="3" y1="21" x2="21" y2="21" />  <path d="M5 21v-14l8 -4v18" />  <path d="M19 21v-10l-6 -4" />  <line x1="9" y1="9" x2="9" y2="9.01" />  <line x1="9" y1="12" x2="9" y2="12.01" />  <line x1="9" y1="15" x2="9" y2="15.01" />  <line x1="9" y1="18" x2="9" y2="18.01" /></svg>`,
             },
           ],

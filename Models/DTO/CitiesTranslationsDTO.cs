@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Models.DTO
 {
-    public partial class BlogCategoriesTranslationsDTO : IDto
+    public partial class CitiesTranslationsDTO : IDto
     {
-        public int category_id { get; set; }
+        public int city_id { get; set; }
         public int lang_id { get; set; }
         public string? title { get; set; } 
+
         public void SetDefaultValues()
         {
-            category_id = 0;
-            lang_id = 1;
+            city_id = 0;
+            lang_id = 0;
             title = string.Empty;
         }
     }
-
 }

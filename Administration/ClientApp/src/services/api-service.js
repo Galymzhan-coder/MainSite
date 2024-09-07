@@ -1,7 +1,11 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 
+// prod url
 const host = 'https://localhost:7153/';
+// dev url
+//const host = 'http://localhost:5038/';
+
 
 export default class ApiService {
   // Функция для получения данных

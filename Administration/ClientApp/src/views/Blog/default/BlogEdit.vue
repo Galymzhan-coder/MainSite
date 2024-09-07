@@ -115,7 +115,14 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+  import { ref, reactive, onMounted, defineProps } from 'vue';
+
+  const props = defineProps({
+    id: {
+      type: Number,
+      required: false
+    }
+  });
 
   const date = ref();
   const crop = ref();
@@ -231,9 +238,13 @@ import { ref, reactive } from 'vue';
     if (crop.value) {
       crop.value.reset(); 
     }
-
-
   }
+
+  onMounted(() => {
+    //imgObj.imgSrc = 'https://localhost:7153/media/blogs/1p/1725365367o9jxg_224.jpg'; // Correctly set the image URL
+    console.log(props)
+  });
+ 
 </script>
 
 <style>

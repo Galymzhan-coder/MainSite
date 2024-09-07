@@ -12,6 +12,9 @@ using Google.Protobuf;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Microsoft.Extensions.Options;
+using Services.Factory.Interfaces;
+using Newtonsoft.Json;
+using Models.DTO;
 
 public class ImageUploadController : Controller
 {
@@ -19,10 +22,13 @@ public class ImageUploadController : Controller
     private static readonly Random random = new Random();
     public static string storageDir = "media";
     private readonly ImageConfig _imageConfig;
-    public ImageUploadController(IWebHostEnvironment hostingEnvironment, IOptions<ImageConfig> imageConfig)
+    private readonly IServiceFactory _serviceFactory;
+
+    public ImageUploadController(IWebHostEnvironment hostingEnvironment, IOptions<ImageConfig> imageConfig, IServiceFactory serviceFactory)
     {
         _hostingEnvironment = hostingEnvironment;
         _imageConfig = imageConfig.Value;
+        _serviceFactory = serviceFactory;
     }
 
     public string GetNewFileName(string fname)
@@ -73,14 +79,6 @@ public class ImageUploadController : Controller
         var fileUrl = $"{Request.Scheme}://{Request.Host}/uploaded-images/{newFName}";
         return Ok(new { imageUrl = fileUrl });
     }
-    [HttpPost("test-file"), ApiVersion("1")]
-    public IActionResult TestName(string name = null)
-    {
-        string path = GetStoragePath(name);
-        string result = GenerateSubdir(path);
-        return Ok(new { result = result });
-    }
-
     public static string GenerateName(string ext, string suffix = null)
     {
         string randomString = GenerateRandomString(5);
@@ -133,7 +131,7 @@ public class ImageUploadController : Controller
             return Path.Combine(path, name.Trim('/'));
         }
     }
-    [HttpPost("test-uploaded"), ApiVersion("1")]
+    [HttpPost("new-upload-image"), ApiVersion("1")]
 
     public async Task<IActionResult> SaveUploadedAsync(IFormFile file, string path, bool subdir = true)
     {
@@ -162,6 +160,7 @@ public class ImageUploadController : Controller
         }
 
         string newFileName = GenerateName(Path.GetExtension(file.FileName).TrimStart('.'));
+        string originalFileNameWithoutExtension = Path.GetFileNameWithoutExtension(newFileName);
         string fullPath = Path.Combine(storagePath, newFileName);
 
         try
@@ -177,7 +176,7 @@ public class ImageUploadController : Controller
                     foreach (var size in _imageConfig.Blogs.Image)
                     {
                         var resizedImage = image.Clone(ctx => ctx.Resize(size[0], size[1]));
-                        string resizedFileName = GenerateName(Path.GetExtension(file.FileName).TrimStart('.'), $"{size[0]}x{size[1]}");
+                        string resizedFileName = $"{originalFileNameWithoutExtension}_{size[0]}x{size[1]}{Path.GetExtension(file.FileName)}";
                         string resizedFullPath = Path.Combine(storagePath, resizedFileName);
                         await resizedImage.SaveAsync(resizedFullPath);
                     }
@@ -193,5 +192,40 @@ public class ImageUploadController : Controller
         return Ok(new { result = result });
     }
 
+    [HttpGet("get-image"), ApiVersion("1")]
+    public IActionResult GetImage(string type, int id)
+    {
+        var service = _serviceFactory.GetService(type);
+        if (service == null)
+            return NotFound($"Service for type '{type}' not found.");
 
+        var check = service.getItem(id, 1);
+        if (check == null)
+            return NotFound($"'{type}' not found record.");
+
+        var imagePath = check.image;
+        if (string.IsNullOrEmpty(imagePath))
+            return NotFound("Image not found in the record.");
+
+        var fullPath = Path.Combine(_hostingEnvironment.WebRootPath, storageDir, "blogs", imagePath);
+
+        if (!System.IO.File.Exists(fullPath))
+            return NotFound("Image file not found on the server.");
+
+        try
+        {
+            // Read the file as a byte array
+            var imageBytes = System.IO.File.ReadAllBytes(fullPath);
+
+            // Convert the byte array to a Base64 string
+            var base64String = Convert.ToBase64String(imageBytes);
+
+            // Return the Base64 string in the response
+            return Ok(new { image = base64String });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Error retrieving image: {ex.Message}");
+        }
+    }
 }
