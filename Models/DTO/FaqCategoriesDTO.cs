@@ -19,7 +19,7 @@ namespace Models.DTO
 
         public string sefname { get; set; } = null!;
 
-        public bool is_active { get; set; }
+        public uint? is_active { get; set; }
 
         public DateTime create_date { get; set; }
 
@@ -37,7 +37,7 @@ namespace Models.DTO
 
             sefname = string.Empty;
 
-            is_active = false;
+            is_active = 0;
 
             create_date = DateTime.MinValue;
 

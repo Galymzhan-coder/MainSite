@@ -13,6 +13,7 @@ import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 
 import FaqCategories from '../views/FaqCategories/FaqCategories';
+import FaqCategoriesEdit from '../views/FaqCategories/FaqCategoriesEdit'
 
 import BlogCategories from "@/views/Blog/categories/Category";
 import Blog from "@/views/Blog/default/Blog";
@@ -25,6 +26,7 @@ const routes = [
     path: "/",
     name: "Home",
     redirect: "/auth",
+    meta: { title: 'Главная - Административная панель' }
   },
   {
     path: "/auth",
@@ -127,6 +129,11 @@ const routes = [
         name: 'FaqCategories',
         path: '/FaqCategories',
         component: FaqCategories,
+      },
+      {
+        name: 'FaqCategoriesEdit',
+        path: '/FaqCategoriesEdit/:id',
+        component: FaqCategoriesEdit,
       },
     ],
   },

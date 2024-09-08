@@ -55,6 +55,14 @@ module.exports = /*defineConfig(*/{
     //writeToDisk: true,
   outputDir: 'ClientApp/dist',
   indexPath: 'ClientApp/dist/index.html',
+  pages: {
+    index: {
+      entry: 'src/main.js', // основной файл вашего приложения
+      template: 'public/index.html', // путь к файлу шаблона
+      filename: 'index.html', // имя выходного файла
+      title: 'Административная панель' // заголовок страницы
+    }
+  }
   //outputDir: '../wwwroot',
   //indexPath: '../wwwroot/index.html',
   //port: 5002,

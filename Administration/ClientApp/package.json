@@ -1,5 +1,6 @@
 {
-  "name": "administration123",
+  "name": "Admin-Panel",
+  "description": "Admin Panel - Административная панель",
   "version": "0.1.0",
   "private": true,
   "scripts": {

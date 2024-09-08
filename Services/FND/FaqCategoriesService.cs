@@ -21,7 +21,7 @@ namespace Services.FND
         {
             try
             {
-                var lst = Index("faq_categories", "*", "");
+                var lst = Index("faq_categories", "*", "1=1 order by id");
 
                 return lst;
             }
