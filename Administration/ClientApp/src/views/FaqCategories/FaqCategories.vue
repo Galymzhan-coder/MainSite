@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 border">
-    <button @click="addItem" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4">
+    <button @click="goToPageById('FaqCategoriesCreate',0)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4">
       Добавить
     </button>
         
@@ -62,11 +62,11 @@
       console.error('Error fetching data:', error);
     }
   });
-
+  /*
   function addItem() {
     items.value.push({ id: items.value.length + 1, name: `Item ${items.value.length + 1}`, active: true });
   }
-
+  */
 
   const selectedItem = ref(null);
   const showForm = ref(false);

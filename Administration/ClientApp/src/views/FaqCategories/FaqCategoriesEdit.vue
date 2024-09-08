@@ -80,24 +80,31 @@
 
   onMounted(async () => {
     try {
+      let id = route.params.id;
+
       const data = await apiService.fetchDataByType('Index', 'faq_category');
       items.value = data;
       //console.log("router=", router, ", id=", route.params.id);
       //selectedItem = ref(items.value.find(item => item.id === itemsEdit.parentId)?.title || null);
       //selectedItem = ref(items.value.map(item => item.id == itemsEdit.parentId).values);
 
-      let id = route.params.id;
+      
       //const editData = await apiService.fetchDataById('GetCategoryItem', id);
-      const editData = await apiService.fetchDataByTypeId('GetItem', 'faq_category', id);
-      itemsEdit.value = editData;
-      selectedItem = items.value.find(item => item.id === editData.parent_id);
+
+      if(id>0)
+      {
+        const editData = await apiService.fetchDataByTypeId('GetItem', 'faq_category', id);
+        itemsEdit.value = editData;
+        selectedItem = items.value.find(item => item.id === editData.parent_id);
+      }
+      
 
       //}
       //formItems.id = editData.id;
 
       //itemsEdit.value.is_active = itemsEdit.value.is_active === 1 ? true : false;
 
-      console.log("FaqCategoryEdit id=", id, ", route.params=", route.params, ", data=", data, ", selectedItem=", selectedItem, ", editData=", editData);
+      console.log("FaqCategoryEdit id=", id, ", route.params=", route.params, ", data=", data, ", selectedItem=", selectedItem);
       console.log("itemsEdit=", itemsEdit);
     } catch (error) {
       console.error('Error fetching data:', error);

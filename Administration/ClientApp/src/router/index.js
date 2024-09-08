@@ -13,7 +13,8 @@ import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 
 import FaqCategories from '../views/FaqCategories/FaqCategories';
-import FaqCategoriesEdit from '../views/FaqCategories/FaqCategoriesEdit'
+import FaqCategoriesEdit from '../views/FaqCategories/FaqCategoriesEdit';
+import FaqCategoriesCreate from '../views/FaqCategories/FaqCategoriesCreate';
 
 import BlogCategories from "@/views/Blog/categories/Category";
 import Blog from "@/views/Blog/default/Blog";
@@ -134,6 +135,11 @@ const routes = [
         name: 'FaqCategoriesEdit',
         path: '/FaqCategoriesEdit/:id',
         component: FaqCategoriesEdit,
+      },
+      {
+        name: 'FaqCategoriesCreate',
+        path: '/FaqCategoriesCreate/:id',
+        component: FaqCategoriesCreate,
       },
     ],
   },
