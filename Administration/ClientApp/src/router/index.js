@@ -4,8 +4,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import category from '../views/category/Category';
 import categoryEdit from '../views/category/CategoryEdit';
 
-import  TextPages  from '@/views/TextPages/TextPages';
-import  TextPagesEdit  from '@/views/TextPages/TextPagesEdit';
+import  TextPages  from '@/views/textPages/TextPages';
+import  TextPagesEdit  from '@/views/textPages/TextPagesEdit';
 
 import TopManagement from '../views/TopManagement/TopManagement';
 import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
