@@ -12,6 +12,7 @@ import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 
+
 import BlogCategories from "@/views/Blog/categories/Category";
 import BlogCategoriesCreate from "@/views/Blog/categories/CategoryCreate";
 import BlogCategoriesEdit from "@/views/Blog/categories/CategoryEdit";
@@ -26,6 +27,7 @@ const routes = [
     path: "/",
     name: "Home",
     redirect: "/auth",
+    meta: { title: 'Главная - Административная панель' }
   },
   {
     path: "/auth",
@@ -141,6 +143,21 @@ const routes = [
         name: 'TopManagementEdit',
         path: '/TopManagement/:id',
         component: TopManagementEdit,
+      },
+      {
+        name: 'FaqCategories',
+        path: '/FaqCategories',
+        component: FaqCategories,
+      },
+      {
+        name: 'FaqCategoriesEdit',
+        path: '/FaqCategoriesEdit/:id',
+        component: FaqCategoriesEdit,
+      },
+      {
+        name: 'FaqCategoriesCreate',
+        path: '/FaqCategoriesCreate/:id',
+        component: FaqCategoriesCreate,
       },
     ],
   },

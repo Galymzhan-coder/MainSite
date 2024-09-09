@@ -38,7 +38,8 @@ builder.Services.AddScoped<ILanguagesService, LanguagesService>();
 builder.Services.AddScoped<IPagesService, PagesService>();
 builder.Services.AddScoped<ITopManagementService, TopManagementService>();
 builder.Services.AddScoped<IBlogCategoriesService, BlogCategoriesService>();
-builder.Services.AddScoped<ICitiesService, CitiesService>();
+builder.Services.AddScoped<IFaqCategoriesService, FaqCategoriesService>();
+
 
 builder.Services.AddScoped<IBlogsService, BlogsService>();
 
@@ -46,15 +47,9 @@ builder.Services.AddScoped<IBlogsService, BlogsService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddCors(options =>
 {
-    /*options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(builder =>
     {
         builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });*/
-    options.AddPolicy("AllowSpecificOrigin", builder =>
-    {
-        builder.WithOrigins("http://localhost:8084") // Разрешаем только этот источник
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
@@ -98,17 +93,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(new StaticFileOptions
-{
-    OnPrepareResponse = context =>
-    {
-        context.Context.Response.Headers.Append("Access-Control-Allow-Origin", "http://localhost:8084");
-    }
-});
-app.UseRouting();
-//app.UseCors();
-app.UseCors("AllowSpecificOrigin"); // Применяем политику CORS
+app.UseStaticFiles();
 
+app.UseRouting();
+app.UseCors();
 app.UseAuthorization();
 
 app.UseSwagger();
