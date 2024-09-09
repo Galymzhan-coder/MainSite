@@ -15,10 +15,11 @@
     <span>Категории блога</span>
   </div>
   <div class="p-4 border text-sm">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4">
+    <router-link class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"
+                 :to="{ name: 'blog-category-create' }">
       Создать категорию
-    </button>
-    <div class="flex flex-col">
+    </router-link>
+    <div class="flex flex-col mt-4">
       <div class="grid grid-cols-4 gap-0 grid-cols-custom font-semibold">
         <div class="bg-gray-300 px-3 py-2 border">#</div>
         <div class="bg-gray-300 px-3 py-2 border">Наименование</div>
@@ -42,10 +43,10 @@
           </button>
         </div>
         <div class="px-3 py-3 border flex flex-row gap-2">
-          <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-2 w-[40px] flex items-center justify-center" @click="blogEdit(blog.id)">
+          <router-link class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-2 w-[40px] flex items-center justify-center" :to="{ name: 'blog-category-update',params: { id: blog.id } }">
             <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>
-          </button>
-          <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 w-[40px]  flex items-center justify-center">
+          </router-link>
+          <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 w-[40px]  flex items-center justify-center" @click="blogDelete('blog_ctg',blog.id)">
             <svg class="h-5 w-5 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <line x1="4" y1="7" x2="20" y2="7" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" />  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
           </button>
         </div>
@@ -55,13 +56,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineEmits } from 'vue';
 import ApiService from '@/services/api-service.js';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
 const filteredBlogs = ref([]);
 const apiService = new ApiService();
+const emit = defineEmits(['handle-delete-modal']);
 
 const fetchBlogs = async () => {
   try {
@@ -71,10 +71,9 @@ const fetchBlogs = async () => {
       console.error('Error fetching data:', error);
     }
 };
-
-const blogEdit = (id) => {
-  router.push({ name: 'blog-update', params: { id: id } });
-}
+  const blogDelete = async (type, id) => {
+    emit('handle-delete-modal', true, type, id);
+  };
 
 
 

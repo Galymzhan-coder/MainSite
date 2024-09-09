@@ -15,14 +15,19 @@ namespace Models.DTO
         public bool is_active { get; set; } 
         public DateTime create_date { get; set; }
         public DateTime update_date { get; set; }
+        public BlogCategoriesDTO()
+        {
+            // Устанавливаем текущую дату при создании
+            create_date = DateTime.Now;
+            update_date = DateTime.Now;
+        }
         public void SetDefaultValues()
         {
             id = 0;
             title = string.Empty;
             sefname = string.Empty;
             is_active = false;
-            create_date = DateTime.MinValue;
-            update_date = DateTime.MinValue;
+            update_date = DateTime.Now;
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Services.FND
         {
             try
             {
-                var item = getItem("blogs b, blogs_translations bt", @"b.id, b.category_id, bt.title, b.title, b.sefname, b.image, b.publish_date, b.views,b.is_active, b.create_date, 
+                var item = getItem("blogs b, blogs_translations bt", @"b.id, b.category_id, COALESCE(bt.title, b.title) title, b.sefname, b.text, b.image, b.publish_date, b.views,b.is_active, b.create_date, 
                                    b.update_date, b.is_mainpage", $"b.id = bt.blog_id and b.id={id} and bt.lang_id={lang_id}");
 
                 return item;

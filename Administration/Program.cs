@@ -65,7 +65,7 @@ builder.Services.AddControllers()
 
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath) // Этот вызов на самом деле не требуется в новых версиях
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true); // Пример добавления дополнительного файла конфигурации
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true); // Пример добавления дополнительного файла конфигурации
 
 
 builder.Services.AddSwaggerGen(c =>

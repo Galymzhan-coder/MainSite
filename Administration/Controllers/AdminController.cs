@@ -153,7 +153,6 @@ namespace Administration.Controllers
 
                 return StatusCode(500, "Internal Server Error! ");
             }
-
         }
 
         [HttpPost("Update"), ApiVersion("1")]
@@ -175,7 +174,6 @@ namespace Administration.Controllers
 
                 service.update(id, dto, lang_id);
 
-                return Ok();
 
             }
             catch (JsonException je)
@@ -190,6 +188,7 @@ namespace Administration.Controllers
 
                 return BadRequest($"Update. An error occurred: {ex.Message}");
             }
+            return Ok(new { success = true, message = "Successful updated!" });
         }
 
         [HttpPost("Create"), ApiVersion("1")]
@@ -224,7 +223,7 @@ namespace Administration.Controllers
                 return BadRequest($"Create. An error occured: {ex.Message}");
             }
 
-            return Ok();
+            return Ok(new { success = true, message = "Successful created!" });  
         }
 
         [HttpPost("Delete"), ApiVersion("1")]
@@ -251,7 +250,7 @@ namespace Administration.Controllers
                 return BadRequest($"Delete. An error occured: {ex.Message}");
             }
 
-            return Ok();
+            return Ok(new { success=true, message="Successful deleted!" });
         }
 
     }

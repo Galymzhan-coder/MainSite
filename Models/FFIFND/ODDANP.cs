@@ -2248,7 +2248,7 @@ namespace Models.FFIFND
             */
             string assemblyLocation = Assembly.GetExecutingAssembly().Location;
             string directory = Path.GetDirectoryName(assemblyLocation);
-            string filePath = Path.Combine(directory, "appsettings.json");
+            string filePath = Path.Combine(directory, "appsettings.Development.json");
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddJsonFile(filePath)

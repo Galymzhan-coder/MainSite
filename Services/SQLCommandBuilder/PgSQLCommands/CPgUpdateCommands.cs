@@ -25,11 +25,13 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
                     continue;
 
                 var value = property.GetValue(dto);
+                // Пропускаем которые значение null
+                if (value == null || (value is bool && (bool)value == false))
+                    continue;
                 var formattedValue = FormatSqlValue(value);
                 parameters.Add($"{property.Name} = {formattedValue}");
             }
 
-            sql.Append(string.Join(", ", parameters));
             sql.Append($" WHERE id = {id}");
 
             return sql.ToString();
@@ -50,6 +52,10 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
                     continue;
 
                 var value = property.GetValue(dto);
+                // Пропускаем которые значение null
+                if (value == null || (value is bool && (bool)value == false))
+                    continue;
+
                 var formattedValue = FormatSqlValue(value);
                 parameters.Add($"{property.Name} = {formattedValue}");
             }
@@ -68,7 +74,7 @@ namespace Services.SQLCommandBuilder.PgSQLCommands
             if (value is string || value is DateTime)
                 return $"'{value.ToString().Replace("'", "''")}'"; // Очень простая обработка для предотвращения инъекций
             if (value is bool)
-                return (bool)value ? "true" : "false";
+                return (bool)value ? "1" : "0";
             return value.ToString();
         }
     }

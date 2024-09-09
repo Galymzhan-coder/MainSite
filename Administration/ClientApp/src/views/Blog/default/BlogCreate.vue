@@ -57,7 +57,7 @@
       <div class="grid grid-cols-1 w-1/2" v-show="imgObj.imgName && imgObj.imgName.length > 0">
         <label class="text-sm">Названия файла</label>
         <span>{{ imgObj.imgName }}</span>
-      </div> 
+      </div>
     </div>
     <div class="mb-4" v-show="imgObj.imgName && imgObj.imgName.length > 0">
       <cropper ref="crop"
@@ -67,27 +67,28 @@
                :stecil-size="{ width: 300, height:300 }"
                :resize-image="{
                                 adjustStencil: false,
-                                minWidth: 100, 
-                                minHeight: 100 
+                                minWidth: 100,
+                                minHeight: 100
                               }"
                image-restriction="stencil"
                :style="{
-                         maxWidth: '100%', 
-                         maxHeight: '100%', 
-                         width: imgObj.imgWidth > parentWidth ? '100%' : imgObj.imgWidth + 'px',
-                         height: 'auto',
-                         objectFit: 'contain',
-                         backgroundColor: 'transparent'
-                       }"
-      />
-      <div class="">
-        <button class="button bg-yellow-500 p-2 rounded mr-3 text-white" @click="cropImage">
-          Обрезать изображение
-        </button>
-        <button class="button bg-red-500 p-2 rounded text-white" @click="deleteImage">
-          Удалить изображание
-        </button>
-      </div>
+               maxWidth: '100%' ,
+               maxHeight: '100%' ,
+               width: imgObj.imgWidth>
+        parentWidth ? '100%' : imgObj.imgWidth + 'px',
+        height: 'auto',
+        objectFit: 'contain',
+        backgroundColor: 'transparent'
+        }"
+        />
+        <div class="">
+          <button class="button bg-yellow-500 p-2 rounded mr-3 text-white" @click="cropImage">
+            Обрезать изображение
+          </button>
+          <button class="button bg-red-500 p-2 rounded text-white" @click="deleteImage">
+            Удалить изображание
+          </button>
+        </div>
     </div>
     <div class="flex items-center mb-4">
       <input id="useful-checkbox" type="checkbox" value="" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -96,7 +97,7 @@
     <div class="flex items-center mb-4">
       <input id="mainpage-checkbox" type="checkbox" value="" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label for="mainpage-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Вывести на главную под слайдером</label>
-    </div> 
+    </div>
     <div class="flex items-center">
       <input id="active-checkbox" type="checkbox" value="" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
       <label for="active-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Активность</label>
@@ -104,22 +105,16 @@
   </div>
   <div class="p-4 border font-medium text mb-4">
     <button type="submit" class="border rounded py-1 px-3 bg-gray-500 hover:bg-gray-700 text-white">Сохранить</button>
-   </div>
+  </div>
 </template>
 
 <script setup>
-  import { ref, reactive, onMounted, defineProps } from 'vue';
-  import ApiService from '@/services/api-service.js';
+  import { ref, reactive, defineProps } from 'vue';
+  //import ApiService from '@/services/api-service.js';
 
-  const apiService = new ApiService();
-  const props = defineProps({
-    id: {
-      type: Number,
-      required: false
-    }
-  });
+  //const apiService = new ApiService();
 
-  //const date = ref();
+  const date = ref();
   const crop = ref();
 
   const format = (date) => {
@@ -192,10 +187,10 @@
     imgObj.imgWidth = 0;
     const fileInput = document.querySelector('input[type="file"]');
     if (fileInput) {
-      fileInput.value = ''; 
+      fileInput.value = '';
     }
     if (crop.value) {
-      crop.value.reset(); 
+      crop.value.reset();
     }
   }
 
@@ -212,36 +207,9 @@
     is_mainage: ""
   });
 
-  const updateOrSelectBlog = async (id) => {
-    const data = await apiService.fetchDataByTypeId('getItem', 'blog', id);
+  
+  
 
-    if (!data) {
-      return;
-    }
-    Object.assign(bodyBlog, {
-      category_id: data.category_id,
-      title: data.title,
-      sefname: data.sefname,
-      publish_date: data.publish_date,
-      description: data.description,
-      text: data.text,
-      image: data.image,
-      is_active: data.is_active,
-      is_usefull: data.is_usefull,
-      is_mainage: data.is_mainpage
-    });
-    state.content = bodyBlog.text;
-
-    console.log(data)
-    console.log(bodyBlog)
-  }
-
-  onMounted(() => {
-    //imgObj.imgSrc = 'https://localhost:7153/media/blogs/1p/1725365367o9jxg_224.jpg'; // Correctly set the image URL
-    const { id } = props;
-    updateOrSelectBlog(id);
-  });
- 
 </script>
 
 <style>
@@ -251,6 +219,4 @@
   }
 </style>
 <style>
-
-
 </style>

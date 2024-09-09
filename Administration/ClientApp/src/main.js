@@ -9,10 +9,16 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import { quillEditor } from 'vue3-quill';
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import QuillEditorVue from "./components/QuillEditor.vue";
+import Vue3Toasity from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import DeleteModal from "@/components/modals/DeleteModal";
 
 configure({
   validateOnInput: true,
 });
+
+
 
 const app = createApp(App);
 app
@@ -20,9 +26,16 @@ app
   .component("Field", Field)
   .component("ErrorMessage", ErrorMessage)
   .component("DatePicker", DatePicker)
-  .component("Cropper", Cropper);
+  .component("Cropper", Cropper)
+  .component("quill-editor-vue", QuillEditorVue)
+  .component("delete-modal", DeleteModal)
+
 
 app.use(router, store);
 app.use(quillEditor);
+app.use(Vue3Toasity, {
+  autoClose: 2000,
+  limit: 2
+});
 
 app.mount("#app");

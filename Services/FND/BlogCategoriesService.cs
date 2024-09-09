@@ -37,7 +37,7 @@ namespace Services.FND
         {
             try
             {
-                var item = getItem("blog_categories bc, blog_categories_translations bct", @"bc.id, COALESCE(bct.title , bc.title) title, bc.sefname, bc.is_active", 
+                var item = getItem("blog_categories bc, blog_categories_translations bct", @"bc.id, COALESCE(bct.title , bc.title) title, bc.sefname, bc.is_active, bc.create_date, bc.update_date", 
                                     $"bc.id = bct.category_id and bc.id={id} and bct.lang_id={lang_id}");
 
                 return item;
@@ -58,7 +58,7 @@ namespace Services.FND
             try
             {
 
-                update<BlogCategoriesDTO>(id, "blog_categories", blogCategories, "title,sefname,is_active", lang_id);
+                update<BlogCategoriesDTO>(id, "blog_categories", blogCategories, "id, create_date", lang_id);
 
                 var blogCategoriesTranslationsDTO = new BlogCategoriesTranslationsDTO() { category_id = id, lang_id = lang_id, title = blogCategories.title ?? "" };
 
@@ -78,7 +78,7 @@ namespace Services.FND
             var blogCategories = dto as BlogCategoriesDTO;
 
 
-            var idContent = create<BlogCategoriesDTO>("blog_categories", dto, "id,title,sefname,is_active", "id");
+            var idContent = create<BlogCategoriesDTO>("blog_categories", dto, "id", "id");
 
 
             BlogCategoriesTranslationsDTO blogCategoriesDTO = new BlogCategoriesTranslationsDTO()

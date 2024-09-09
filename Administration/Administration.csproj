@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\components\modals\" />
     <Folder Include="ClientApp\src\store\blogs\" />
     <Folder Include="ClientApp\src\views\Blog\categories\" />
     <Folder Include="ClientApp\src\views\Contacts\Offices\" />

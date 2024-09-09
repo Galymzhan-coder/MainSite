@@ -10,7 +10,7 @@ namespace Models.DTO
     public partial class BlogsDTO : IDto
     {
         public int id {  get; set; }
-        public string? category_name {  get; set; }
+        public int? category_id {  get; set; }
         public string? title { get; set; }
         public string? description { get; set; }
         public string? text { get; set; }
@@ -27,7 +27,7 @@ namespace Models.DTO
         public void SetDefaultValues()
         {
             id            = 0;
-            category_name = string.Empty;
+            category_id   = 0;
             title         = string.Empty;
             description   = string.Empty;
             text          = string.Empty;

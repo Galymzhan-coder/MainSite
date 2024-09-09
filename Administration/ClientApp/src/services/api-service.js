@@ -53,11 +53,41 @@ export default class ApiService {
         method: method,
         url: host + url,
         data: data
+
       });
       return response.data;
     } catch (error) {
       console.error(`Error sending ${method} request:`, error);
       throw error;
+    }
+  }
+
+  async sendDataType(url, type, data = null, lang_id, id = null, method = 'post') {
+    try {
+      const response = await axios({
+        method: method,
+        url: host + url,
+        params: { type: type, lang_id: lang_id, id: id },
+        data: data
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to send data:', error);
+      return null;
+    }
+  }
+
+  async sendDataTypeId(url, type, id = null, method = 'post') {
+    try {
+      const response = await axios({
+        method: method,
+        url: host + url,
+        params: { type: type, id: id },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to send data:', error);
+      return null;
     }
   }
 

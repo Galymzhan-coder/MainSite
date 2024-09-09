@@ -12,8 +12,10 @@ import TopManagementEdit from '../views/TopManagement/TopManagementEdit';
 
 import articlesEdit from '../views/CategoryAndContent/ArticlesEdit';
 
-
 import BlogCategories from "@/views/Blog/categories/Category";
+import BlogCategoriesCreate from "@/views/Blog/categories/CategoryCreate";
+import BlogCategoriesEdit from "@/views/Blog/categories/CategoryEdit";
+
 import Blog from "@/views/Blog/default/Blog";
 import BlogEdit from "@/views/Blog/default/BlogEdit";
 import Cities from "@/views/Contacts/Cities/Index";
@@ -86,12 +88,30 @@ const routes = [
           {
             name: 'blog-update',
             path: 'update/:id',
-            component: BlogEdit
+            component: BlogEdit,
+            props: true
           },
           {
             name: 'blog-category',
             path: 'category',
-            component: BlogCategories
+            children: [
+              {
+                name: 'blog-category-index',
+                path: 'index',
+                component: BlogCategories
+              },
+              {
+                name: 'blog-category-create',
+                path: 'create',
+                component: BlogCategoriesCreate
+              },
+              {
+                name: 'blog-category-update',
+                path: 'update/:id',
+                component: BlogCategoriesEdit,
+                props: true
+              },
+            ]
           }
         ]
       },
